@@ -8,7 +8,7 @@ Python 3.x
 1. Change directory to the project directory.
 
 ```
-# cd ods-ci
+# cd rhoda-ci
 ```
 
 2. Now run the script.

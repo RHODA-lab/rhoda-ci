@@ -2,7 +2,9 @@
 
 Code contributed to this repo must follow the _[ODS-CI RobotFramework Style Guide](https://docs.google.com/document/d/11ZJOPI1uq-0Wl6a2V8fkAv_TQhfzp9t_IjXAheaJxmQ/edit?usp=sharing)_
 
-This document explains how to verify the code using the [robocop](https://robocop.readthedocs.io) code analyzer and how to automatically format some issues using the [robotidy](https://robotidy.readthedocs.io) code formatter.
+This document explains how to verify the code using the [robocop](https://robocop.readthedocs.io)
+code analyzer and how to automatically format some issues using the
+[robotidy](https://robotidy.readthedocs.io) code formatter.
 
 
 # Analyze the code using Robocop
@@ -22,7 +24,7 @@ Robocop is a tool that performs static code analysis of Robot Framework code.
   ```
   # Run the command from the root folder in order to
   # the .robocop configuration to be used
-  cd ods-ci
+  cd rhoda-ci
 
   # Check a file
   robocop tests/Tests/.../203__alerts.robot
@@ -47,7 +49,11 @@ Robocop is a tool that performs static code analysis of Robot Framework code.
 
  # Automatically format the code using Robotidy
 
- Robotidy is a tool for auto formatting Robot Framework code. It runs various [transformers](https://robotidy.readthedocs.io/en/latest/transformers/index.html) to format the code. Transformers are enabled and configured in the [robotidy.toml](https://github.com/red-hat-data-services/ods-ci/blob/master/robotidy.toml) config file at the root folder.
+ Robotidy is a tool for auto formatting Robot Framework code. It runs various
+ [transformers](https://robotidy.readthedocs.io/en/latest/transformers/index.html) to
+ format the code. Transformers are enabled and configured in the
+ [robotidy.toml](https://github.com/red-hat-data-services/ods-ci/blob/master/robotidy.toml)
+ config file at the root folder.
 
  - Install the required libraries
     ```
@@ -58,7 +64,7 @@ Robocop is a tool that performs static code analysis of Robot Framework code.
   ```
   # Run the command from the root folder in order to
   # the robitidy.toml configuration to be used
-  cd ods-ci
+  cd rhoda-ci
 
   # Show formatting changes without modifying the file:
   robotidy tests/Tests/.../203__alerts.robot
@@ -75,3 +81,45 @@ Robocop is a tool that performs static code analysis of Robot Framework code.
   robotidy --config /dev/null --transform RenameKeywords  tests/Resources/Page/ODH/ODHDashboard/ODHDashboard.robot --diff --no-overwrite
   robotidy --config /dev/null --transform RenameKeywords  tests/Resources/Page/ODH/ODHDashboard/ODHDashboard.robot --diff --overwrite
   ```
+
+ # Automatically format the code using black
+ Black is the uncompromising code formatter. By using it, formatting becomes transparent
+ after a while you can focus on the content instead.
+
+ - Install the required libraries
+    ```
+    pip install -r requirements-dev.txt
+    ```
+ - Formatting examples
+    ```
+     # A single file
+     black <file-name>.py
+
+     # A directory
+     black <full-path-to-directory>
+
+     # Preferred usage
+     cd rhoda-ci
+     black .
+    ```
+
+ # Automatically sorting the imported modules/packages using isort
+ isort is a python utility that automatically sorts the imports alphabetically with
+ separation for sections by type.
+
+ - Install the required libraries
+    ```
+    pip install -r requirements-dev.txt
+    ```
+ - Formatting examples
+    ```
+     # A single file
+     isort <file-name>.py
+
+     # A directory
+     isort <full-path-to-directory>
+
+     # Preferred usage
+     cd rhoda-ci
+     isort .
+    ```

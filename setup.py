@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 try:
-    from setuptools import setup, find_packages
+    from setuptools import find_packages, setup
 except ImportError:
     from ez_setup import use_setuptools
 
     use_setuptools()
-    from setuptools import setup, find_packages
+    from setuptools import find_packages, setup
 
 setup(
     name="rhoda-ci",
@@ -29,7 +29,7 @@ setup(
         "requests",
         "robotframework-requests",
         "escapism",
-        "semver>=2,<3"
+        "semver>=2,<3",
     ],
     zip_safe=True,
     include_package_data=True,

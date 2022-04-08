@@ -1,0 +1,13 @@
+---
+# Custom configuration that extends from default
+
+extends: default
+
+rules:
+
+  braces: disable
+
+  line-length: disable
+
+  truthy:
+    check-keys: false

@@ -1,12 +1,13 @@
-
 import os
-import subprocess
-import shutil
-import yaml
 import re
+import shutil
+import subprocess
 import sys
 import time
+
 import jinja2
+import yaml
+
 
 def clone_config_repo(**kwargs):
     """
@@ -19,19 +20,23 @@ def clone_config_repo(**kwargs):
         kwargs["git_password"] = ""
 
     try:
-       if os.path.exists(kwargs["repo_dir"]) and os.path.isdir(kwargs["repo_dir"]):
-           shutil.rmtree(kwargs["repo_dir"])
-       os.makedirs(kwargs["repo_dir"])
-       print("git repo dir '%s' created successfully" % kwargs["repo_dir"])
+        if os.path.exists(kwargs["repo_dir"]) and os.path.isdir(kwargs["repo_dir"]):
+            shutil.rmtree(kwargs["repo_dir"])
+        os.makedirs(kwargs["repo_dir"])
+        print("git repo dir '%s' created successfully" % kwargs["repo_dir"])
     except OSError as error:
-       print("git repo dir '%s' can not be created." % kwargs["repo_dir"])
-       return False
+        print("git repo dir '%s' can not be created." % kwargs["repo_dir"])
+        return False
 
     git_repo_with_credens = kwargs["git_repo"]
     if kwargs["git_username"] != "" and kwargs["git_password"] != "":
         git_credens = "{}:{}".format(kwargs["git_username"], kwargs["git_password"])
-        git_repo_with_credens = re.sub(r'(https://)(.*)', r'\1' + git_credens + "@" + r'\2', kwargs["git_repo"])
-    cmd = "git clone {} -b {} {}".format(git_repo_with_credens, kwargs["git_branch"], kwargs["repo_dir"])
+        git_repo_with_credens = re.sub(
+            r"(https://)(.*)", r"\1" + git_credens + "@" + r"\2", kwargs["git_repo"]
+        )
+    cmd = "git clone {} -b {} {}".format(
+        git_repo_with_credens, kwargs["git_branch"], kwargs["repo_dir"]
+    )
     ret = subprocess.call(cmd, shell=True)
     if ret:
         print("Failed to clone repo {}.".format(kwargs["git_repo"]))
@@ -44,7 +49,7 @@ def read_yaml(filename):
     Reads the given config file and returns the contents of file in dict format
     """
     try:
-        with open(filename, 'r') as fh:
+        with open(filename, "r") as fh:
             return yaml.safe_load(fh)
     except OSError as error:
         return None
@@ -55,10 +60,14 @@ def execute_command(cmd, get_stderr=False):
     Executes command in the local node
     """
     try:
-        process = subprocess.run(cmd, shell=True, check=True,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True)
+        process = subprocess.run(
+            cmd,
+            shell=True,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
         output = process.stdout
         if get_stderr:
             err = process.stderr
@@ -75,20 +84,22 @@ def oc_login(ocp_console_url, username, password, timeout=600):
     Login to test cluster using oc cli command
     """
     cluster_api_url = ocp_console_url.replace("console-openshift-console.apps", "api")
-    cluster_api_url = re.sub(r'/$','', cluster_api_url) + ":6443"
-    cmd = "oc login -u {} -p {} {} --insecure-skip-tls-verify=true".format(username, password, cluster_api_url)
+    cluster_api_url = re.sub(r"/$", "", cluster_api_url) + ":6443"
+    cmd = "oc login -u {} -p {} {} --insecure-skip-tls-verify=true".format(
+        username, password, cluster_api_url
+    )
     count = 0
     chk_flag = 0
-    while (count <= timeout):
+    while count <= timeout:
         out = execute_command(cmd)
-        if ((out is not None) and ("Login successful" in out)):
-            print ("Logged into cluster successfully")
+        if (out is not None) and ("Login successful" in out):
+            print("Logged into cluster successfully")
             chk_flag = 1
             break
         time.sleep(5)
         count += 5
     if not chk_flag:
-        print ("Failed to login to cluster")
+        print("Failed to login to cluster")
         sys.exit(1)
 
 
@@ -100,9 +111,10 @@ def render_template(search_path, template_file, output_file, replace_vars):
         templateEnv = jinja2.Environment(loader=templateLoader)
         template = templateEnv.get_template(template_file)
         outputText = template.render(replace_vars)
-        with open(output_file, 'w') as fh:
+        with open(output_file, "w") as fh:
             fh.write(outputText)
     except:
-        print("Failed to render template and create json "
-              "file {}".format(output_file))
+        print(
+            "Failed to render template and create json " "file {}".format(output_file)
+        )
         sys.exit(1)

@@ -10,6 +10,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
+
 ---
 apiVersion: v1
 kind: Pod
@@ -22,27 +23,30 @@ spec:
     # This is required to make the test-output volume Writable
     fsGroup: 0
   containers:
-
     - image: <INSERT URL TO YOUR BUILT IMAGE>
       imagePullPolicy: Always
       name: rhoda-ci
       env:
-        # Use this environment variable to pass args to the rhoda-ci run script in the container
+        # Use this environment variable to pass args to the rhoda-ci run script
+        # in the container
         - name: RUN_SCRIPT_ARGS
           value: "--test-variables-file /tmp/rhoda-ci-test-variables/test-variables.yml"
       volumeMounts:
-          # Mount the test-variables to prevent leaking secure info for the cluster you test against
+        # Mount the test-variables to prevent leaking secure info for the
+        # cluster you test against
         - name: rhoda-ci-test-variables
           mountPath: /tmp/rhoda-ci-test-variables
 
         - mountPath: /tmp/rhoda-ci/test-output
           name: rhoda-ci-test-output
   restartPolicy: Never
+
   volumes:
     - name: rhoda-ci-test-variables
       secret:
         # Specify Secret that has the necessary test-variables.yml
         secretName: rhoda-ci-test-variables
+
     # Persistent Volume where we will store the test-output for this pod
     - name: rhoda-ci-test-output
       persistentVolumeClaim:

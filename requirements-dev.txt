@@ -1,3 +1,6 @@
+black
+isort
 robotframework-lsp
 robotframework-robocop
-robotframework-tidy
+robotframework-tidy; python_version >= '3.7'
+yamllint
