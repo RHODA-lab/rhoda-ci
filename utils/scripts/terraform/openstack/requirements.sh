@@ -5,3 +5,7 @@ sudo dnf install -y terraform
 sudo pip3 install python-terraform
 sudo pip3 install --ignore-installed pyyaml
 git config --global http.sslVerify "false"
+sudo mkdir -p ~/bin
+sudo curl -Lo ~/bin/ocm https://github.com/openshift-online/ocm-cli/releases/download/v0.1.61/ocm-linux-amd64
+sudo chmod +x ~/bin/ocm
+sudo mkdir -p /home/jenkins/workspace
