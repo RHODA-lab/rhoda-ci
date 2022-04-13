@@ -179,8 +179,8 @@ class OpenshiftClusterManager():
             sys.exit(1)
         return cluster_state.strip("\n")
 
-    def get_osd_cluster_version(self):
-        """Gets osd cluster version"""
+    def get_rhoda_cluster_version(self):
+        """Gets rhoda cluster version"""
 
         cluster_version = self.ocm_describe(filter="--json | jq -r '.version.raw_id'")
         if cluster_version is None:
@@ -189,8 +189,8 @@ class OpenshiftClusterManager():
             sys.exit(1)
         return cluster_version.strip("\n")
 
-    def get_osd_cluster_console_url(self):
-        """Gets osd cluster console url"""
+    def get_rhoda_cluster_console_url(self):
+        """Gets RHODA cluster console url"""
 
         filter_str = "--json | jq -r '.console.url'"
         cluster_console_url = self.ocm_describe(filter=filter_str)
@@ -200,31 +200,26 @@ class OpenshiftClusterManager():
             sys.exit(1)
         return cluster_console_url.strip("\n")
 
-    def get_osd_cluster_info(self, config_file="osd_config_file.yaml"):
-        """Gets osd cluster information and stores in config file"""
+    def get_rhoda_cluster_info(self, config_file="rhoda_config_file.yaml"):
+        """Gets RHODA cluster information and stores in config file"""
 
         cluster_info = {}
-        console_url = self.get_osd_cluster_console_url()
+        console_url = self.get_rhoda_cluster_console_url()
         cluster_info['OCP_CONSOLE_URL'] = console_url
-        cluster_version = self.get_osd_cluster_version()
+        cluster_version = self.get_rhoda_cluster_version()
         cluster_info['CLUSTER_VERSION'] = cluster_version
-        odh_dashboard_url = console_url.replace('console-openshift-console',
-                                                'rhods-dashboard-redhat-ods-applications')
-        cluster_info['ODH_DASHBOARD_URL'] = odh_dashboard_url
-        # TODO: Avoid this hard coding and call
-        # create identity provider method once its ready
         cluster_info['TEST_USER'] = {}
         cluster_info['TEST_USER']['AUTH_TYPE'] = "ldap-provider-qe"
         cluster_info['TEST_USER']['USERNAME'] = "ldap-admin1"
         cluster_info['OCP_ADMIN_USER'] = {}
         cluster_info['OCP_ADMIN_USER']['AUTH_TYPE'] = "htpasswd-cluster-admin"
         cluster_info['OCP_ADMIN_USER']['USERNAME'] = "htpasswd-cluster-admin-user"
-        osd_cluster_info = {}
-        osd_cluster_info[self.cluster_name] = cluster_info
+        rhoda_cluster_info = {}
+        rhoda_cluster_info[self.cluster_name] = cluster_info
         with open(config_file, 'w') as file:
-            yaml.dump(osd_cluster_info, file)
+            yaml.dump(rhoda_cluster_info, file)
 
-    def update_osd_cluster_info(self, config_file="osd_config_file.yaml"):
+    def update_rhoda_cluster_info(self, config_file="rhoda_config_file.yaml"):
         """Updates osd cluster information and stores in config file"""
 
         with open(config_file, 'r') as file:
@@ -762,9 +757,9 @@ if __name__ == "__main__":
             default="osd-qe-1")
         delete_idp_parser.set_defaults(func=ocm_obj.delete_idp)
 
-        #Argument parsers for get_osd_cluster_info
+        #Argument parsers for get_rhoda_cluster_info
         info_parser = subparsers.add_parser(
-            'get_osd_cluster_info',
+            'get_rhoda_cluster_info',
             help=("Gets the cluster information"),
             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         optional_info_parser = info_parser._action_groups.pop()
@@ -775,11 +770,11 @@ if __name__ == "__main__":
             help="osd cluster name",
             action="store", dest="cluster_name", metavar="",
             default="osd-qe-1")
-        info_parser.set_defaults(func=ocm_obj.get_osd_cluster_info)
+        info_parser.set_defaults(func=ocm_obj.get_rhoda_cluster_info)
 
-        #Argument parsers for update_osd_cluster_info
+        #Argument parsers for update_rhoda_cluster_info
         update_info_parser = subparsers.add_parser(
-            'update_osd_cluster_info',
+            'update_rhoda_cluster_info',
             help=("Updates the cluster information"),
             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         optional_update_info_parser = update_info_parser._action_groups.pop()
@@ -798,7 +793,7 @@ if __name__ == "__main__":
             help="Ldap test password",
             action="store", dest="ldap_test_password", metavar="",
             default="")
-        update_info_parser.set_defaults(func=ocm_obj.update_osd_cluster_info)
+        update_info_parser.set_defaults(func=ocm_obj.update_rhoda_cluster_info)
 
         #Argument parsers for install_rhods_addon
         install_rhods_parser = subparsers.add_parser(
