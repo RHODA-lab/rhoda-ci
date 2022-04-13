@@ -767,9 +767,9 @@ if __name__ == "__main__":
         info_parser._action_groups.append(optional_info_parser)
 
         optional_info_parser.add_argument("--cluster-name",
-            help="osd cluster name",
+            help="rhoda cluster name",
             action="store", dest="cluster_name", metavar="",
-            default="osd-qe-1")
+            default="rhoda-qe-test")
         info_parser.set_defaults(func=ocm_obj.get_rhoda_cluster_info)
 
         #Argument parsers for update_rhoda_cluster_info
@@ -782,9 +782,9 @@ if __name__ == "__main__":
         update_info_parser._action_groups.append(optional_update_info_parser)
 
         optional_update_info_parser.add_argument("--cluster-name",
-            help="osd cluster name",
+            help="rhoda cluster name",
             action="store", dest="cluster_name", metavar="",
-            default="osd-qe-1")
+            default="rhoda-qe-test")
         optional_update_info_parser.add_argument("--htpasswd-cluster-password",
             help="htpasswd Cluster admin password",
             action="store", dest="htpasswd_cluster_password", metavar="",
