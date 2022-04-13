@@ -56,7 +56,7 @@ class OpenshiftClusterManager():
             match = re.search(r'.*\.(\S+)', (os.path.basename(ocm_env[0])))
             if match is not None:
                 self.testing_platform = match.group(1)
- 
+
     def _is_ocmcli_installed(self):
         """Checks if ocm cli is installed"""
         cmd = "ocm version"
@@ -143,7 +143,6 @@ class OpenshiftClusterManager():
                     channel_grp = "--channel-group {} ".format(self.channel_group)
             else:
                 log.error("Invalid channel group. Values can be 'stable' or 'candidate'.")
-
         cmd = ("ocm create cluster --aws-account-id {} "
                "--aws-access-key-id {} --aws-secret-access-key {} "
                "--ccs --region {} --compute-nodes {} "
