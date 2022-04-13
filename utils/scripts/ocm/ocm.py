@@ -209,7 +209,7 @@ class OpenshiftClusterManager():
         config_file = self.repo_dir + "test-variable.yml"
         with open(config_file, 'r') as fh:
             data = yaml.safe_load(fh)
-        cluster_info = {}
+        data = {}
         console_url = self.get_rhoda_cluster_console_url()
         data['OCP_CONSOLE_URL'] = console_url
         cluster_version = self.get_rhoda_cluster_version()
