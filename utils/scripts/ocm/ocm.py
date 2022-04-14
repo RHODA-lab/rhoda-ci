@@ -204,22 +204,29 @@ class OpenshiftClusterManager():
 
     def get_rhoda_cluster_info(self):
         """Gets RHODA cluster information and stores in config file"""
+        log.info("debugging")
         config_template = self.repo_dir + self.config_template
         shutil.copy(config_template, self.repo_dir + "test-variable.yml")
         config_file = self.repo_dir + "test-variable.yml"
+        log.info("config file : {}".format(config_file))
         with open(config_file, 'r') as fh:
             data = yaml.safe_load(fh)
         data = {}
+        log.info(data)
         console_url = self.get_rhoda_cluster_console_url()
+        log.info("ocp url : {}".format(console_url))
         data['OCP_CONSOLE_URL'] = console_url
         cluster_version = self.get_rhoda_cluster_version()
+        log.info("ocp url version : {}".format(cluster_version))
         data['CLUSTER_VERSION'] = cluster_version
         data['OCP_ADMIN_USER'] = {}
         data['OCP_ADMIN_USER']['AUTH_TYPE'] = "htpasswd-cluster-admin"
         data['OCP_ADMIN_USER']['USERNAME'] = "htpasswd-cluster-admin-user"
         data['OCP_ADMIN_USER']['PASSWORD'] = self.htpasswd_cluster_password
+        log.info(data)
         with open(config_file, 'w') as yaml_file:
             yaml_file.write(yaml.dump(data, default_flow_style=False, sort_keys=False))
+        log.info("success!")
 
     def update_rhoda_cluster_info(self, config_file="rhoda_config_file.yaml"):
         """Updates RHODa cluster information and stores in config file"""
