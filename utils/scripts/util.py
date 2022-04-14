@@ -7,6 +7,7 @@ import re
 import sys
 import time
 import jinja2
+from logger import log
 
 def clone_config_repo(**kwargs):
     """
@@ -64,7 +65,8 @@ def execute_command(cmd, get_stderr=False):
             err = process.stderr
             return output, err
         return output
-    except:
+    except Exception as e:
+        log.info("Cluster created failed with error message: {}".format(e.stderr) )
         if get_stderr:
             return None, None
         return None
