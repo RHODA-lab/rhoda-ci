@@ -645,10 +645,9 @@ class OpenshiftClusterManager():
         if not self.is_addon_installed("dbaas-operator"):
             self.install_addon("dbaas-operator")
             self.wait_for_addon_installation_to_complete("dbaas-operator")
+            time.sleep(300)
         else:
             log.info("Operator installed already")
-        # Waiting 5 minutes to ensure all the services are up
-        time.sleep(300)
 
     def uninstall_rhoda_addon(self):
         if self.is_addon_installed("dbaas-operator"):
