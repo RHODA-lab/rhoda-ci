@@ -787,6 +787,10 @@ if __name__ == "__main__":
             help="template file to generate config",
             action="store", dest="repo_dir", metavar="",
             default="")
+        optional_info_parser.add_argument("--htpasswd-cluster-password",
+            help="htpassword used for cluster creation",
+            action="store", dest="htpasswd-cluster-password", metavar="",
+            default="")
         info_parser.set_defaults(func=ocm_obj.get_rhoda_cluster_info)
 
         #Argument parsers for update_rhoda_cluster_info
