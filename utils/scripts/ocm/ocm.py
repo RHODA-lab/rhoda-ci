@@ -788,8 +788,8 @@ if __name__ == "__main__":
             action="store", dest="repo_dir", metavar="",
             default="")
         optional_info_parser.add_argument("--htpasswd-cluster-password",
-            help="htpassword used for cluster creation",
-            action="store", dest="htpasswd-cluster-password", metavar="",
+            help="htpasswd Cluster admin password",
+            action="store", dest="htpasswd_cluster_password", metavar="",
             default="")
         info_parser.set_defaults(func=ocm_obj.get_rhoda_cluster_info)
 
