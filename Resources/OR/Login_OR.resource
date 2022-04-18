@@ -8,4 +8,11 @@ ${txtBxUserName}            //input[@id="inputUsername"]
 ${txtBxPassword}            //input[@id="inputPassword"]
 ${btnLogin}                 //button[contains(.,"Log in")]
 ${titleOverview}            //span[contains(.,"Overview")]
+${elemNavSideBar}           //div[@id="page-sidebar"]
+${eleNavMenu}               //li[starts-with(.,"<<menu>>") and contains(@class,"nav")]
+${eleNavChildMenu}          //li[starts-with(.,"<<menu>>") and contains(@class,"nav")]/section//li[contains(.,"<<submenu>>")]
+${lblChildPageHeader}       //h1[contains(.,"<<submenu>>")]
+${lblPageTitle}             //span[contains(@data-test-id,"resource-title") and contains(.,"<<header>>")]
+
+
 
