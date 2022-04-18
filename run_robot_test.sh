@@ -1,6 +1,6 @@
 #/bin/bash
 
-TEST_CASE_FILE=tests/Tests
+TEST_CASE_FILE=Tests
 TEST_VARIABLES_FILE=test-variables.yml
 TEST_VARIABLES=""
 TEST_ARTIFACT_DIR="test-output"
@@ -39,7 +39,7 @@ while [ "$#" -gt 0 ]; do
       shift
       ;;
 
-    # Specify included tags 
+    # Specify included tags
     # Example: sanityANDinstall sanityORinstall installNOTsanity
     --include)
       shift
@@ -131,10 +131,10 @@ if [[ ! -d "${TEST_ARTIFACT_DIR}" ]]; then
 fi
 case "$(uname -s)" in
     Darwin)
-        TEST_ARTIFACT_DIR=$(mktemp -d  ${TEST_ARTIFACT_DIR} -t ${TEST_ARTIFACT_DIR}/ods-ci-$(date +%Y-%m-%d-%H-%M)-XXXXXXXXXX)
+        TEST_ARTIFACT_DIR=$(mktemp -d  ${TEST_ARTIFACT_DIR} -t ${TEST_ARTIFACT_DIR}/rhoda-ci-$(date +%Y-%m-%d-%H-%M)-XXXXXXXXXX)
          ;;
     Linux)
-        TEST_ARTIFACT_DIR=$(mktemp -d -p ${TEST_ARTIFACT_DIR} -t ods-ci-$(date +%Y-%m-%d-%H-%M)-XXXXXXXXXX)
+        TEST_ARTIFACT_DIR=$(mktemp -d -p ${TEST_ARTIFACT_DIR} -t rhoda-ci-$(date +%Y-%m-%d-%H-%M)-XXXXXXXXXX)
         ;;
 esac
 
