@@ -34,9 +34,11 @@ class OpenstackTerraformProvisioner():
         self.interface = args.get("interface")
         self.identity_api_version = args.get("identity_api_version")
         self.working_dir = dir_path
+        self.ocm_version = args.get("ocm_version")
 
     def create_instance(self):
         """Created Openstack vm instance"""
+        ocm_download = "https://github.com/openshift-online/ocm-cli/releases/download/{}/ocm-linux-amd64".format(self.ocm_version)
         tf = Terraform(working_dir=self.working_dir,
                        variables={'cloud_name': self.cloud_name,
                                   'vm_name': self.vm_name,
@@ -45,7 +47,8 @@ class OpenstackTerraformProvisioner():
                                   'image_name': self.image_name,
                                   'flavor_name': self.flavor_name,
                                   'key_pair': self.key_pair,
-                                  'network_name': self.network_name})
+                                  'network_name': self.network_name,
+                                  'ocm_bin' : ocm_download})
         tf.init()
         ret, out, err = tf.apply(no_color=IsFlagged, input=False, refresh=False, capture_output=True, skip_plan=True)
         if ret != 0:
@@ -143,6 +146,10 @@ if __name__ == "__main__":
             help="Image name to create an instance",
             action="store", dest="image_name", metavar="",
             default="CentOS-Stream-8-x86_64-GenericCloud")
+        optional_create_instance_parser.add_argument("--ocm-version",
+            help="OCM version to be installed",
+            action="store", dest="ocm_version", metavar="",
+            default="v0.1.62")
         create_instance_parser.set_defaults(func=prov_obj.create_instance)
 
         #Argument parsers for delete_instance
@@ -182,7 +189,7 @@ if __name__ == "__main__":
 
         #Argument parsers for set_config
         set_config_parser = subparsers.add_parser(
-            'set_config',        
+            'set_config',
             help=("Sets config for using Openstack with terraform"),
             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 

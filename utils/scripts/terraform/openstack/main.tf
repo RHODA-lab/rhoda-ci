@@ -41,9 +41,10 @@ resource "null_resource" "copy_execute" {
   }
   
    provisioner "remote-exec" {
+    
     inline = [
       "sudo chmod 777 /tmp/requirements.sh",
-      "sh /tmp/requirements.sh",
+      "sh /tmp/requirements.sh ${var.ocm_bin}",
     ]
   }
   

@@ -8,11 +8,11 @@ except ImportError:
     from setuptools import setup, find_packages
 
 setup(
-    name="ods-ci",
+    name="rhoda-ci",
     version="0.1",
-    description="Red Hat Open Data Science QE Tier Tests",
-    author="ODS CI",
-    author_email="ods-ci@redhat.com",
+    description="Red Hat OpenShift Database Access Operator QE Tier Tests",
+    author="rhoda-ci",
+    author_email="rhoda-ci@redhat.com",
     install_requires=[
         "reportportal-client",
         "robotframework>=4",
@@ -35,4 +35,3 @@ setup(
     include_package_data=True,
     packages=find_packages(exclude=["ez_setup"]),
 )
-
