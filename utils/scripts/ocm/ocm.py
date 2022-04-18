@@ -205,11 +205,10 @@ class OpenshiftClusterManager():
     def get_rhoda_cluster_info(self):
         """Gets RHODA cluster information and stores in config file"""
         config_template = self.repo_dir + self.config_template
-        shutil.copy(config_template, self.repo_dir + "test-variable.yml")
-        config_file = self.repo_dir + "test-variable.yml"
+        shutil.copy(config_template, self.repo_dir + "test-variables.yml")
+        config_file = self.repo_dir + "test-variables.yml"
         with open(config_file, 'r') as fh:
             data = yaml.safe_load(fh)
-        data = {}
         console_url = self.get_rhoda_cluster_console_url()
         data['OCP_CONSOLE_URL'] = console_url
         cluster_version = self.get_rhoda_cluster_version()
