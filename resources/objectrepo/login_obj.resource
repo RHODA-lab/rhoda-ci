@@ -1,6 +1,7 @@
 *** Comments ***
 Object Repository for Login Screen
 
+
 *** Variables ***
 ${titleLoginType}           //h1[contains(.,"Log in with")]
 ${titleLoginPage}           //h1[contains(.,"Log in to your account")]
@@ -14,4 +15,5 @@ ${elemNavMenu}              //li[starts-with(.,"<<menu>>") and contains(@class,"
 ${elemNavChildMenu}         //li[starts-with(.,"<<menu>>") and contains(@class,"nav")]/section//li[contains(.,"<<submenu>>")]
 ${lblChildPageHeader}       //h1[contains(.,"<<submenu>>")]
 ${lblPageTitle}             //span[contains(@data-test-id,"resource-title") and contains(.,"<<header>>")]
-
+${elemDataServiceNav}       //li[starts-with(.,"Data Services") and contains(@class,"nav")]
+${elemDataAccessNav}        //li[starts-with(.,"Data Services") and contains(@class,"nav")]/section//li[contains(.,"Database Access")]
