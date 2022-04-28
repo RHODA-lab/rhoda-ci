@@ -8,3 +8,14 @@ OCP_ADMIN_USER:
   AUTH_TYPE: "kube:admin"
   USERNAME: kubeadmin
   PASSWORD: abc123XYZ!
+ISV_CRED:
+  MONGODB:
+    ORG_ID: xxxx
+    PUB_KEY: xxxx
+    PRI_KEY: xxxxx
+  CRUNCHYDB:
+    PUB_KEY: xxxx
+    PRI_KEY: xxxx
+  COCKROACHDB:
+    API_KEY: xxxx
+
