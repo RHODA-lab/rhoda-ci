@@ -50,6 +50,12 @@ class OpenshiftClusterManager:
         self.pool_name = args.get("pool_name")
         self.config_template = args.get("config_template")
         self.repo_dir = args.get("repo_dir")
+        self.mongo_org_id = args.get("mongo_org_id")
+        self.mongo_pub_key = args.get("mongo_pub_key")
+        self.mongo_pri_key = args.get("mongo_pri_key")
+        self.crunchy_pub_key = args.get("crunchy_pub_key")
+        self.crunchy_pri_key = args.get("crunchy_pri_key")
+        self.crdb_api_key = args.get("crdb_api_key")
 
         ocm_env = glob.glob(dir_path + "/../../../ocm.json.*")
         if ocm_env != []:
@@ -265,6 +271,24 @@ class OpenshiftClusterManager:
 
         with open(config_file, "w") as yaml_file:
             yaml_file.write(yaml.dump(config_data, default_flow_style=False))
+
+    def update_isv_cluster_info(self):
+        """Updates ISV information and stores in config file"""
+        config_template = self.repo_dir + self.config_template
+        shutil.copy(config_template, self.repo_dir + "test-variables.yaml")
+        config_file = self.repo_dir + "test-variables.yaml"
+        with open(config_file, "r") as fh:
+            data = yaml.safe_load(fh)
+        data["ISV_CRED"] = {}
+        data["ISV_CRED"]["MONGODB"]["ORG_ID"] = self.mongo_org_id
+        data["ISV_CRED"]["MONGODB"]["PUB_KEY"] = self.mongo_pub_key
+        data["ISV_CRED"]["MONGODB"]["PRI_KEY"] = self.mongo_pri_key
+        data["ISV_CRED"]["CRUNCHYDB"]["PUB_KEY"] = self.crunchy_pub_key
+        data["ISV_CRED"]["CRUNCHYDB"]["PRI_KEY"] = self.crunchy_pri_key
+        data["ISV_CRED"]["COCKROACHDB"]["API_KEY"] = self.crdb_api_key
+        with open(config_file, "w") as yaml_file:
+            yaml_file.write(yaml.dump(data, default_flow_style=False, sort_keys=False))
+        log.info("isv infromation update success!")
 
     def wait_for_osd_cluster_to_be_ready(self, timeout=7200):
         """Waits for cluster to be in ready state"""
@@ -977,6 +1001,68 @@ if __name__ == "__main__":
         default="",
     )
     update_info_parser.set_defaults(func=ocm_obj.update_osd_cluster_info)
+
+    # Argument parsers for update_isv_info
+    update_isv_info = subparsers.add_parser(
+        "update_isv_info",
+        help=("Updates the ISV information"),
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    optional_update_info_parser = update_info_parser._action_groups.pop()
+    required_update_info_parser = update_info_parser.add_argument_group(
+        "required arguments"
+    )
+    update_info_parser._action_groups.append(optional_update_info_parser)
+
+    optional_update_info_parser.add_argument(
+        "--mongo_org_id",
+        help="mongoDB org id",
+        action="store",
+        dest="mongo_org_id",
+        metavar="",
+        default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--mongo_pub_key",
+        help="mongoDB public key",
+        action="store",
+        dest="mongo_pub_key",
+        metavar="",
+        default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--mongo_pri_key",
+        help="mongoDB private key",
+        action="store",
+        dest="mongo_pri_key",
+        metavar="",
+        default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--crunchy_pub_key",
+        help="crunchyDB public key",
+        action="store",
+        dest="crunchy_pub_key",
+        metavar="",
+        default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--crunchy_pri_key",
+        help="crunchyDB private key",
+        action="store",
+        dest="crunchy_pri_key",
+        metavar="",
+        default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--crdb_api_key",
+        help="cockroachDB api key",
+        action="store",
+        dest="crdb_api_key",
+        metavar="",
+        default="",
+    )
+    update_info_parser.set_defaults(func=ocm_obj.update_isv_cluster_info)
 
     # Argument parsers for install_rhods_addon
     install_rhods_parser = subparsers.add_parser(

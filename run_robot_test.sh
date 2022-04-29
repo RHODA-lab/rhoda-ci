@@ -3,7 +3,7 @@ set -eux
 
 # -------- Global Variables --------
 TEST_CASE_LOCATION=tests
-TEST_CASE_FILE=""
+TEST_CASE_FILE=tests
 TEST_VARIABLES_FILE=test-variables.yaml
 TEST_VARIABLES=""
 TEST_ARTIFACT_DIR="test-output"
