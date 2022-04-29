@@ -1,18 +1,19 @@
-import os
 import argparse
-import re
-import subprocess
-import shutil
-import yaml
-import sys
-import jinja2
-import time
 import glob
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+
+import jinja2
+import yaml
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(dir_path + "/../")
-from util import clone_config_repo, read_yaml, execute_command
 from logger import log
+from util import clone_config_repo, execute_command, read_yaml
 
 """
 Class for Openshift Cluster Manager

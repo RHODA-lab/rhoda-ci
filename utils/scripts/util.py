@@ -1,13 +1,14 @@
 import os
-import subprocess
-import shutil
-import yaml
+import random
 import re
+import shutil
+import string
+import subprocess
 import sys
 import time
+
 import jinja2
-import random
-import string
+import yaml
 from logger import log
 
 ROBOT_LIBRARY_VERSION = "0.1"

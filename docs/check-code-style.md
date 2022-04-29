@@ -75,3 +75,38 @@ Robocop is a tool that performs static code analysis of Robot Framework code.
   robotidy --config /dev/null --transform RenameKeywords  tests/Resources/Page/ODH/ODHDashboard/ODHDashboard.robot --diff --no-overwrite
   robotidy --config /dev/null --transform RenameKeywords  tests/Resources/Page/ODH/ODHDashboard/ODHDashboard.robot --diff --overwrite
   ```
+
+# Automatically format python code
+
+There are two tools that is used in this repository to maintain consistent visualization
+of code.
+
+Black is the uncompromising Python code formatter. This allows us to focus on the code
+and avoid contentions with visual indicators.
+
+isort is a utility to sort imports automatically into alphabetical order, section and type.
+
+- Install the required libraries
+  ```black requirement
+  pip install -r requirements-dev.txt
+  ```
+
+- Format a file using the back
+  ```black single file
+  black absolute/path/to/file.py
+  ```
+
+- Format all python files in the repo
+  ```black all files
+  black .
+  ```
+
+- Sort import modules in a python file
+  ```isort file
+  isort absolute/path/to/file.py
+  ```
+
+- Perform sort on all the python files in the repository
+  ```isort all
+  isort .
+  ```

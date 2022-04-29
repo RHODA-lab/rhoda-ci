@@ -1,5 +1,5 @@
-from semver import VersionInfo
 from robotlibcore import keyword
+from semver import VersionInfo
 
 
 class Helpers:
