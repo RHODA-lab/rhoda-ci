@@ -272,14 +272,11 @@ class OpenshiftClusterManager:
         with open(config_file, "w") as yaml_file:
             yaml_file.write(yaml.dump(config_data, default_flow_style=False))
 
-    def update_isv_cluster_info(self):
+    def update_isv_cluster_info(self, config_file="test-variables.yaml"):
         """Updates ISV information and stores in config file"""
-        config_template = self.repo_dir + self.config_template
-        shutil.copy(config_template, self.repo_dir + "test-variables.yaml")
-        config_file = self.repo_dir + "test-variables.yaml"
         with open(config_file, "r") as fh:
             data = yaml.safe_load(fh)
-        data["ISV_CRED"] = {}
+        data["ISV_CRED"]["MONGODB"] = {}
         data["ISV_CRED"]["MONGODB"]["ORG_ID"] = self.mongo_org_id
         data["ISV_CRED"]["MONGODB"]["PUB_KEY"] = self.mongo_pub_key
         data["ISV_CRED"]["MONGODB"]["PRI_KEY"] = self.mongo_pri_key
@@ -288,7 +285,7 @@ class OpenshiftClusterManager:
         data["ISV_CRED"]["COCKROACHDB"]["API_KEY"] = self.crdb_api_key
         with open(config_file, "w") as yaml_file:
             yaml_file.write(yaml.dump(data, default_flow_style=False, sort_keys=False))
-        log.info("isv infromation update success!")
+        log.info("update isv infromation success!")
 
     def wait_for_osd_cluster_to_be_ready(self, timeout=7200):
         """Waits for cluster to be in ready state"""
@@ -1003,8 +1000,8 @@ if __name__ == "__main__":
     update_info_parser.set_defaults(func=ocm_obj.update_osd_cluster_info)
 
     # Argument parsers for update_isv_info
-    update_isv_info = subparsers.add_parser(
-        "update_isv_info",
+    update_info_parser = subparsers.add_parser(
+        "update_isv_cluster_info",
         help=("Updates the ISV information"),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
