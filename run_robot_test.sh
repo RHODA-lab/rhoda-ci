@@ -12,7 +12,7 @@ TEST_INCLUDE_TAG=""
 TEST_EXCLUDE_TAG=""
 SKIP_PIP_INSTALL=0
 SKIP_VENV_CREATE=0
-
+JENKINS_BUILD_NUMBER=${BUILD_NUMBER:-666}
 
 # -------- functions -------------
 
@@ -23,7 +23,6 @@ handle_inputs() {
         case "$flag" in
             d) # Specify directory to store artifacts and reports from each test run
                 TEST_ARTIFACT_DIR=$OPTARG
-                create_artifact_dir
             ;;
             e) # Specify excluded tags
                 TEST_EXCLUDE_TAG=$OPTARG
@@ -114,17 +113,15 @@ setup_venv() {
 
 create_artifact_dir() {
     # Create a unique directory to store the output for current test run
-    if [[ ! -d "${TEST_ARTIFACT_DIR}" ]]; then
-      mkdir "${TEST_ARTIFACT_DIR}"
-    fi
     case "$(uname -s)" in
         Darwin)
-            TEST_ARTIFACT_DIR=$(mktemp -d  ${TEST_ARTIFACT_DIR} -t ${TEST_ARTIFACT_DIR}/rhoda-ci-$(date +%Y-%m-%d-%H-%M)-XXXXXXXXXX)
-             ;;
+            TEST_ARTIFACT_DIR="${TEST_ARTIFACT_DIR}/rhoda-ci-$(date +%Y-%m-%d-%H-%M)-XXXX"
+            ;;
         Linux)
-            TEST_ARTIFACT_DIR=$(mktemp -d -p ${TEST_ARTIFACT_DIR} -t rhoda-ci-$(date +%Y-%m-%d-%H-%M)-XXXXXXXXXX)
+            TEST_ARTIFACT_DIR="${TEST_ARTIFACT_DIR}/rhoda-${JENKINS_BUILD_NUMBER}-$(date +%Y-%m-%d-%M%S)"
             ;;
     esac
+    mkdir -p "${TEST_ARTIFACT_DIR}"
 }
 
 
@@ -132,6 +129,7 @@ echo "------------- STARTING ${0}"
 handle_inputs "$@"
 
 setup_venv
+create_artifact_dir
 
 case "$(uname -s)" in
     Darwin)
@@ -167,7 +165,17 @@ case "$(uname -s)" in
         ;;
 esac
 
+set +e
+./venv/bin/robot  ${EXTRA_ROBOT_ARGS} -d ${TEST_ARTIFACT_DIR} -x xunit_test_result.xml -r test_report.html ${TEST_VARIABLES} --variablefile ${TEST_VARIABLES_FILE} ${TEST_CASE_FILE}
 
-./venv/bin/robot  -d "${TEST_ARTIFACT_DIR}" -x xunit_test_result.xml -r test_report.html ${TEST_VARIABLES} --variablefile ${TEST_VARIABLES_FILE} ${EXTRA_ROBOT_ARGS} ${TEST_CASE_FILE}
+rc=$?
+
+set -e
+#Re-Run failed tests and merge the outputs
+if [[ $rc -ne 0 ]]; then
+    ./venv/bin/robot  ${EXTRA_ROBOT_ARGS} -d ${TEST_ARTIFACT_DIR} -x xunit_test_result.xml -r test_report.html ${TEST_VARIABLES} --variablefile "${TEST_VARIABLES_FILE}" --rerunfailed "${TEST_ARTIFACT_DIR}/output.xml" --output "output_rerun.xml" ${TEST_CASE_FILE}
+
+    ./venv/bin/rebot -d ${TEST_ARTIFACT_DIR} -o "output.xml" -x xunit_test_result.xml -r test_report.html --merge "${TEST_ARTIFACT_DIR}/output.xml" "${TEST_ARTIFACT_DIR}/output_rerun.xml"
+fi
 
 echo "------------- END ${0}"
