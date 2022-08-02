@@ -3,11 +3,12 @@ Documentation       To Verify Provisioning of MongoDB Provider Account and deplo
 Metadata            Version    0.0.1
 
 Resource            ../resources/keywords/deploy_application.resource
+Resource            ../resources/keywords/suite_teardown.resource
 
 Suite Setup         Set Library Search Order    SeleniumLibrary
 Suite Teardown      Tear Down The Test Suite
 Test Setup          Given The Browser Is On Openshift Home Screen
-Test Teardown       Close Browser
+Test Teardown       Tear Down The Test
 
 
 *** Test Cases ***
