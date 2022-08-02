@@ -58,6 +58,3 @@ User Closes Welcome Message
     ${welcomeTile}=     Run Keyword And Return Status    Wait Until Page Contains Element    ${elemWelcomeTile}     timeout=15s
     Run Keyword If    ${welcomeTile}
     ...    Click Element    ${btnWelcomTileClose}
-
-Tear Down The Test Suite
-    Log    Test Suite Test Down
