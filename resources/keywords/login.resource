@@ -59,5 +59,3 @@ User Closes Welcome Message
     Run Keyword If    ${welcomeTile}
     ...    Click Element    ${btnWelcomTileClose}
 
-Tear Down The Test Suite
-    Log    Test Suite Test Down

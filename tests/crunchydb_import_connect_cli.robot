@@ -3,11 +3,11 @@ Documentation       To Verify Provisioning of CrunchyDB Provider Account and dep
 Metadata            Version    0.0.1
 
 Resource            ../resources/keywords/deploy_application.resource
+Resource            ../resources/keywords/suite_and_test_teardown.resource
 
 Suite Setup         Set Library Search Order    OpenShiftLibrary
 Suite Teardown      Tear Down The Test Suite
 Test Setup          Given Login To OpenShift CLI
-Test Teardown       Logout Of OpenShift CLI
 
 
 *** Test Cases ***
