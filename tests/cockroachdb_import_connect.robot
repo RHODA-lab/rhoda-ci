@@ -40,3 +40,10 @@ Scenario: Connect CockroachDB DBSC With An Openshift Application
     And User Imports Openshift cockroach Application From YAML
     And User Creates Service Binding Between cockroach DBSC Instance And Imported Openshift Application
     Then The Application Accesses The Connected cockroach Database Instance
+
+Scenario: Import CockroachDB Provider Account From Developer View
+    [Tags]    smoke    RHOD-180
+    When User Navigates To Add CockroachDB Topology Screen From Developer View
+    And User Navigates To Import Provider Account Screen From Developer View
+    And User Enters Data To Import CockroachDB Provider Account
+    Then Provider Account Import Success
