@@ -16,3 +16,8 @@ Scenario: Provision CockroachDB Database Instance On Default Namespace Using OC 
     When User Provisions New CockroachDB Instance On Default Namespace Using OC CLI
     Then DB Instance Provisioned Successfully On Default Namespace Using OC CLI
 
+Scenario: Provision CockroachDB Database Instance On User Defined Namespace Using OC CLI
+    [Tags]    smoke    RHOD-262-dev
+    When User Provisions New CockroachDB Instance On User Defined Namespace Using OC CLI
+    Then DB Instance Provisioned Successfully On User Defined Namespace Using OC CLI
+
