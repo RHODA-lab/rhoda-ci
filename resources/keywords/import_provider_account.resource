@@ -146,8 +146,6 @@ User Enters Data To Import RDS Provider Account
     Input Text    ${txtBxRdsAwsAccsKeyID}    ${RDS.awsAccessKeyId}
     Input Text    ${txtBoxRdsAwsSecKeyID}    ${RDS.awsSecretAccessKeyId}
     Input Text    ${txtBoxRdsAwsRegion}    ${RDS.awsRegion}
-    Input Text    ${txtBoxAckResrceTags}    ${RESOURCE_TAGS_EMPTY}
-    Input Text    ${txtBoxAckLogLvl}    ${ACK_LOG_LEVEL_EMPTY}
     Element Should Be Visible    ${btnImportEnabled}
     Click Element    ${btnImportEnabled}
 
@@ -285,4 +283,3 @@ User Navigates To Import Provider Account Screen From Developer View
     Element Should Be Visible    ${lnkImportProvAcc}
     Click Element    ${lnkImportProvAcc}
     Switch Window   NEW
-
