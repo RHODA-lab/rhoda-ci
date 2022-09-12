@@ -19,7 +19,7 @@ CRUNCHY:
 COCKROACH:
   apiSecretKey: xxxx
 RDS:
-  awsAccessKeyId: xxxx
-  awsSecretAccessKeyId: xxxx
-  awsRegion: xxxx
+  AWS_ACCESS_KEY_ID: xxxx
+  AWS_SECRET_ACCESS_KEY: xxxx
+  AWS_REGION: xxxx
 
