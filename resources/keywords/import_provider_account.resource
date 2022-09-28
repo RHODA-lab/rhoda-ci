@@ -4,6 +4,7 @@ Resource    ../keywords/deploy_instance_dev.resource
 Resource    ../object_repo/import_dbaasinventory_obj.resource
 Resource    ../object_repo/database_access_obj.resource
 Resource    ../object_repo/installed_operators_obj.resource
+Resource    suite_and_test_teardown.resource
 Library     ../../utils/scripts/util.py
 Library     ../../utils/scripts/dbaas_utils.py
 
@@ -14,6 +15,12 @@ ${INV_ORG_ID}         invalid_org_id
 ${INV_PUB_KEY}        invalid_pub_key
 ${INV_PRI_KEY}        invalid_private_key
 ${VALID_SECRET}       True
+${INV_ACCS_KEY}       invalid_access_key_id
+${INV_SEC_ACCS_KEY}   invalid_secret_access_key_id
+${RESOURCE_TAGS_EMPTY}    ${EMPTY}
+${ACK_LOG_LEVEL_EMPTY}    ${EMPTY}
+
+
 
 *** Keywords ***
 User Selects Invalid Namespace To Import Database Provider Account And Navigates To Database Access Page
@@ -143,11 +150,24 @@ User Enters Data To Import RDS Provider Account
     set Suite Variable    ${isv}
     User Enters Provider Account Name And Selects Database Provider
     Wait Until Page Contains Element    ${txtBxRdsAwsAccsKeyID}    timeout=10s
-    Input Text    ${txtBxRdsAwsAccsKeyID}    ${RDS.awsAccessKeyId}
-    Input Text    ${txtBoxRdsAwsSecKeyID}    ${RDS.awsSecretAccessKeyId}
-    Input Text    ${txtBoxRdsAwsRegion}    ${RDS.awsRegion}
+    Input Text    ${txtBxRdsAwsAccsKeyID}    ${RDS.AWS_ACCESS_KEY_ID}
+    Input Text    ${txtBoxRdsAwsSecKeyID}    ${RDS.AWS_SECRET_ACCESS_KEY}
+    Input Text    ${txtBoxRdsAwsRegion}    ${RDS.AWS_REGION}
     Input Text    ${txtBoxAckResrceTags}    ${RESOURCE_TAGS_EMPTY}
     Input Text    ${txtBoxAckLogLvl}    ${ACK_LOG_LEVEL_EMPTY}
+    Click Element    ${importBtnChkbox}
+    Element Should Be Visible    ${btnImportEnabled}
+    Click Element    ${btnImportEnabled}
+
+User Enters Invalid Data To Import RDS Provider Account
+    [Arguments]    ${isv}=Amazon Relational Database Service
+    Set Suite Variable    ${isv}
+    User Enters Provider Account Name And Selects Database Provider    True
+    Wait Until Page Contains Element    ${txtBxRdsAwsAccsKeyID}    timeout=10s
+    Input Text    ${txtBxRdsAwsAccsKeyID}    ${INV_ACCS_KEY}
+    Input Text    ${txtBoxRdsAwsSecKeyID}    ${INV_SEC_ACCS_KEY}
+    Input Text    ${txtBoxRdsAwsRegion}    ${RDS.AWS_REGION}
+    Click Element    ${importBtnChkbox}
     Element Should Be Visible    ${btnImportEnabled}
     Click Element    ${btnImportEnabled}
 

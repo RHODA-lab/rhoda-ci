@@ -138,6 +138,9 @@ def create_secret_yaml(isv_lower, valid, namespace):
     elif "cockroach" in isv_lower:
         data["stringData"] = variables["COCKROACH"]
         data["metadata"]["labels"]["db-operator/type"] = "credentials"
+    elif "rds" in isv_lower:
+        data["stringData"] = variables["RDS"]
+        data["metadata"]["labels"]["db-operator/type"] = "credentials"
     if valid == "False":
         last_key = list(data["stringData"].keys())[-1]
         data["stringData"][last_key] = "invalidData"
@@ -172,6 +175,8 @@ def create_provider_account_yaml(isv_lower, namespace):
         data["spec"]["providerRef"]["name"] = "crunchy-bridge-registration"
     elif "cockroach" in isv_lower:
         data["spec"]["providerRef"]["name"] = "cockroachdb-cloud-registration"
+    elif "rds" in isv_lower:
+        data["spec"]["providerRef"]["name"] = "rds-registration"
     return yaml.dump(data, sort_keys=False)
 
 

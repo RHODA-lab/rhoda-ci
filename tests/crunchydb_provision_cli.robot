@@ -3,6 +3,7 @@ Documentation       Provision and Deploy CrunchyDB Database Instance from Develo
 Metadata            Version    0.0.1
 
 Resource            ../resources/keywords/provision_dbinstance.resource
+Resource            ../resources/keywords/suite_and_test_teardown.resource
 
 Suite Setup         Set Library Search Order    SeleniumLibrary
 Suite Teardown      Tear Down The Test Suite
