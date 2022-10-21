@@ -13,7 +13,7 @@ User Navigates To Create Database Instance Screen From Database Access Page
 
 User Navigates To Create Database Instance Screen On Developer View
     User Navigates To Add ${DBProvider} To Topology Screen
-    User Selects Database Provider Account
+    Wait Until Keyword Succeeds     2x      1s      Select Given Provider Account On Add Topology Screen
     Run Keyword If    not ${invalid}    Run Keywords
     ...    Element Should Be Visible    ${lnkCreateDBInst}
     ...    AND    Click Element    ${lnkCreateDBInst}
@@ -22,11 +22,7 @@ User Selects DBProvider And Provider Account
     [Arguments]    ${isv_name}=${isv}
     Wait Until Keyword Succeeds    5x    2s    Wait Until Element Is Visible    ${drpDwnDBProvider}
     Wait Until Keyword Succeeds    10s    1s    Toggle Database Provider Drop Down ${isv_name}
-    User Selects Database Provider Account
-
-User Selects Database Provider Account
-    Wait Until Page Contains Element    ${drpDwnDevProvAccount}     timeout=10s
-    Select From List By Label    ${drpDwnDevProvAccount}     ${provaccname}
+    Wait Until Keyword Succeeds     2x      1s      Select Given Provider Account On Add Topology Screen
 
 Toggle Database Provider Drop Down ${isv_name}
     Select From List By Label    ${drpDwnDBProvider}    Select database provider

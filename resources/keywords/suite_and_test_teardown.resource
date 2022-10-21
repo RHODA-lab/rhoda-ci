@@ -52,6 +52,8 @@ Tear Down The Test Case
     Close Browser
     Run Keyword If    "${instanceName}" == "${EMPTY}"
     ...    Remove Created Namespaces
+    Run Keyword If    """inv""" in """${provaccname}"""
+    ...    Remove Imported Provider Accounts
 
 Tear Down The Test Suite
     Log    Test Suite Tear Down
@@ -59,11 +61,10 @@ Tear Down The Test Suite
     Remove Imported Provider Accounts
     Remove Created Namespaces
     Force Delete Terminating Namespaces
-    Logout Of OpenShift CLI
 
-Setup The Test Case
+ Setup The Test Case
     The Browser Is On Openshift Home Screen
-    Run Keyword If    not ${DBaaSPolicyConfigured}    Run Keywords
+    Run Keyword If    not ${DBaaSPolicyConfigured} and ${DBaaSPolicyEnabled}    Run Keywords
     ...    Setup RHODA Persona Namespace
     ...    AND    Align RBAC For ${OCP_LDAP_USER.USERNAME}
     ...    AND    Setup DBaaSPolicy For ${operatorNamespace}

@@ -301,8 +301,8 @@ User Navigates To Add ${databaseProvider} Topology Screen From Developer View
     Click Element    ${btnDBProvAddTopology}
 
 User Navigates To Import Provider Account Screen From Developer View
+    Wait Until Page Contains Element    ${txtNoDBInstance}    timeout=15s
     Element Should Be Visible    ${txtNoDBInstance}     message=Imported Provider Account Available
     Element Should Be Visible    ${lnkImportProvAcc}
     Click Element    ${lnkImportProvAcc}
-    Switch Window   NEW
 

@@ -1,4 +1,4 @@
-{kind: Deployment,apiVersion: apps/v1,metadata:{name: crunchy-app},spec:{replicas: 1,selector:{matchLabels:{name: crunchy-app}},template:{metadata:{labels:{name: crunchy-app}},spec:{containers:[{name: crunchy-app,image: quay.io/ecosystem-appeng/postgresql-orm-quarkus:v0.1,imagePullPolicy: Always,ports:[{containerPort: 8080,protocol: TCP}]}]}}}}
+{kind: Deployment,apiVersion: apps/v1,metadata:{name: crunchy-app},spec:{replicas: 1,selector:{matchLabels:{name: crunchy-app}},template:{metadata:{labels:{name: crunchy-app}},spec:{containers:[{name: crunchy-app,image: quay.io/ecosystem-appeng/postgresql-orm-quarkus:v0.2,imagePullPolicy: Always,ports:[{containerPort: 8080,protocol: TCP}]}]}}}}
 ---
 {kind: Service,apiVersion: v1,metadata:{name: crunchy-app,labels:{name: crunchy-app}},spec:{ports:[{port: 8080,protocol: TCP,targetPort: 8080}],selector:{name: crunchy-app}}}
 ---

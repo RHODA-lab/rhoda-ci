@@ -11,6 +11,7 @@ Suite Setup         Run Keywords
 Suite Teardown      Tear Down The Test Suite
 Test Setup          Given The Browser Is On Openshift Home Screen
 Test Teardown       Tear Down The Test Case
+Force Tags          UI
 
 
 *** Test Cases ***

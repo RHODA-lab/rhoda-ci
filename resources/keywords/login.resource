@@ -47,10 +47,6 @@ Login To OpenShift CLI As LDAP User
     ${cmd}    Set Variable    oc project ${operatorNamespace}
     ${stdout} =    Execute Command    ${cmd}    True
 
-Logout Of OpenShift CLI
-    ${cmd}    Set Variable    oc logout
-    ${stdout} =    Execute Command    ${cmd}    True
-
 Select Login Authentication Type
     [Arguments]    ${auth_type}
     Wait Until Keyword Succeeds    6x    5s    Wait Until Page Contains Element    ${titleLoginType}

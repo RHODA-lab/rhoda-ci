@@ -8,6 +8,7 @@ Resource            ../resources/keywords/deploy_application.resource
 Suite Setup         Set Library Search Order    SeleniumLibrary
 Test Setup          Given Setup The Test Case
 Test Teardown       Tear Down The Test Suite
+Force Tags          UI      rds
 
 
 *** Test Cases ***

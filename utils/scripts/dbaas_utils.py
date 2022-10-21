@@ -204,25 +204,36 @@ def deploy_db_instance_cli(isv, project, namespace=BuiltIn().get_variable_value(
 def retrieve_instances(isv, namespace):
     """To retrieve DB instances for Imported Provider Account"""
     inst_list = []
+    counter = 0
+    pa_reconcile = "True"
     provider_account = BuiltIn().get_variable_value(r"\${provaccname}")
     if provider_account == "":
         create_secret_cli(isv, "true")
         import_provider_account_cli(isv, namespace)
         provider_account = BuiltIn().get_variable_value(r"\${provaccname}")
-    cmd = "oc describe DBaaSInventory/{} -n {}".format(provider_account, namespace)
-    while True:
+    while counter < 5:
         try:
-            result = util.execute_command(cmd)
-            res = yaml.safe_load(result)
-            if res["Status"]["Conditions"]["Reason"] == "ProviderReconcileInprogress":
+            counter += 1
+            oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
+            res = oc_cli.oc_watch("DBaaSInventory", name=provider_account, namespace=namespace)
+            pa_status = res[0]['object']['status']['conditions']
+            for state in pa_status:
+                if state['status'] != "True":
+                    pa_reconcile = "False"
+            if pa_reconcile == "True":
+                log.info("Provider Reconcillation completed successfully")
+                instances = res[0]['object']['status']['instances']
+                for instance in instances:
+                    inst_list.append(instance['instanceID'])
+                log.info("Provider account Instances retrieved successfully!")
+                return inst_list
+            else:
+                counter += 1
                 continue
-            for instance in result.split("\n"):
-                if "Instance ID" in instance:
-                    inst_list.append(instance.split(":")[1].strip())
-            log.info("Provider account Instances retrieved successfully!")
-            return inst_list
-        except KeyError:
-            continue
+        except Exception as e:
+            log.error("Exception occured: " + str(e))
+    else:
+        raise Exception("DBaaSInventory loaded with error")
 
 
 def create_new_project(project_name):

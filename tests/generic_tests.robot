@@ -10,6 +10,7 @@ Suite Setup         Set Library Search Order    SeleniumLibrary
 Suite Teardown      Tear Down The Test Suite
 Test Setup          Given Setup The Test Case
 Test Teardown       Tear Down The Test Case
+Force Tags          UI
 
 
 *** Test Cases ***
