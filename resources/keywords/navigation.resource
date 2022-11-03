@@ -31,13 +31,16 @@ The Browser Is On ${pageHeader} Page
     Element Should Be Visible    ${lblPageTitle}
 
 User Navigates To Database Access Page
-    Element Should Be Visible    ${elemDataServiceNav}
-    Click Element    ${elemDataServiceNav}
-    Element Should Be Visible    ${elemDataAccessNav}
+    ${status} =    Run Keyword And Return Status    Element Should Be Visible    ${elemDataAccessNav}
+    IF    not ${status}
+        Element Should Be Visible    ${elemDataServiceNav}
+        Click Element    ${elemDataServiceNav}
+        Element Should Be Visible    ${elemDataAccessNav}
+    END
     Click Element    ${elemDataAccessNav}
 
 User Navigates To DBaaS Inventories Screen
-    [Arguments]    ${PROJECT}=redhat-dbaas-operator
+    [Arguments]    ${PROJECT}=${operatorNamespace}
     User Selects Administrator View
     User Navigates To Installed Operators Under Operators
     User Filters ${PROJECT} Namespace On Project Dropdown
@@ -45,3 +48,23 @@ User Navigates To DBaaS Inventories Screen
     Page Should Contain Element    ${lnkProvAcc}
     Click Element    ${lnkProvAcc}
     Wait Until Page Contains Element    ${titleDbaasInventories}    timeout=10s
+
+User Navigates To DBaaSPolicy Screen
+    [Arguments]    ${project}=${operatorNamespace}
+    User Selects Administrator View
+    User Navigates To Installed Operators Under Operators
+    User Filters ${project} Namespace On Project Dropdown
+    Wait Until Page Contains Element    ${elemDbaasStatus}    timeout=15s
+    Wait Until Keyword Succeeds    5x    3s    Run Keywords
+    ...    User Navigates To Database Access Under Data Services
+    ...    AND    User Navigates To Installed Operators Under Operators
+    ...    AND    Element Should Be Visible    ${lnkDBaaSPolicy}    timeout=10s
+    Click Element    ${lnkDBaaSPolicy}
+    Wait Until Page Contains Element    ${titleDbaasPolicies}    timeout=10s
+
+User Filters ${projectName} Namespace On Projects Screen
+    Wait Until Page Contains Element    ${txtProjects}    timeout=10s
+    Element Should Be Visible    ${txtBxSearchByName}
+    Input Text    ${txtBxSearchByName}    ${projectName}
+    ${lnkProjectNameUpd} =    Replace String    ${lnkProjectName}    <<project>>    ${projectName}
+    Wait Until Page Contains Element    ${lnkProjectNameUpd}    timeout=5s

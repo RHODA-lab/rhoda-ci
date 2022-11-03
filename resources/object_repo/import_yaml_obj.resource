@@ -4,7 +4,7 @@ Object Repository for Import Yaml page
 
 *** Variables ***
 ${lnkImportYaml}            //a[@aria-label="Import YAML"]
-${hdrImportYamlPg}          //h1[.="Import YAML"]
+${hdrImportYamlPg}          //h1[contains(.,"Import YAML")]
 ${elemImportTextArea}       //textarea
 ${btnImportYamlCreate}      //button[@id="save-changes"]
 ${btnImportYamlCancel}      //button[@id="cancel"]

@@ -10,15 +10,15 @@ Library     ../../utils/scripts/dbaas_utils.py
 
 
 *** Variables ***
-${provaccname}        ${EMPTY}
-${INV_ORG_ID}         invalid_org_id
-${INV_PUB_KEY}        invalid_pub_key
-${INV_PRI_KEY}        invalid_private_key
-${VALID_SECRET}       True
-${INV_ACCS_KEY}       invalid_access_key_id
-${INV_SEC_ACCS_KEY}   invalid_secret_access_key_id
-${RESOURCE_TAGS_EMPTY}    ${EMPTY}
-${ACK_LOG_LEVEL_EMPTY}    ${EMPTY}
+${provaccname}              ${EMPTY}
+${INV_ORG_ID}               invalid_org_id
+${INV_PUB_KEY}              invalid_pub_key
+${INV_PRI_KEY}              invalid_private_key
+${VALID_SECRET}             True
+${INV_ACCS_KEY}             invalid_access_key_id
+${INV_SEC_ACCS_KEY}         invalid_secret_access_key_id
+${RESOURCE_TAGS_EMPTY}      ${EMPTY}
+${ACK_LOG_LEVEL_EMPTY}      ${EMPTY}
 
 
 
@@ -120,7 +120,7 @@ User Enters Invalid Data To Import CrunchyDB Provider Account
 
 User Enters Data To Import CockroachDB Provider Account
     [Arguments]    ${isv}=CockroachDB Cloud
-    set Suite Variable    ${isv}
+    Set Suite Variable    ${isv}
     User Enters Provider Account Name And Selects Database Provider
     Wait Until Page Contains Element    ${txtBxCockroachAPI}    timeout=10s
     Input Text    ${txtBxCockroachAPI}    ${COCKROACH.apiSecretKey}
@@ -129,7 +129,7 @@ User Enters Data To Import CockroachDB Provider Account
 
 User Enters Data To Import Duplicate CockroachDB Provider Account
     [Arguments]    ${isv}=CockroachDB Cloud
-    set Suite Variable    ${isv}
+    Set Suite Variable    ${isv}
     User Enters An Existing Provider Account Name And Selects Database Provider
     Wait Until Page Contains Element    ${txtBxCockroachAPI}    timeout=10s
     Input Text    ${txtBxCockroachAPI}    ${COCKROACH.apiSecretKey}
@@ -231,7 +231,7 @@ Check Status Of Invalid Provider Account
 
 User Imports Invalid ${databaseProvider} Provider Account
     Set Test Variable    ${DBProvider}    ${databaseProvider}
-    User Filters Project redhat-dbaas-operator On Project DropDown And Navigates To Database Access Page
+    User Filters Project ${operatorNamespace} On Project DropDown And Navigates To Database Access Page
     User Navigates To Import Database Provider Account Screen From Database Access Page
     Run Keyword If    "Mongo" in """${databaseProvider}"""
     ...    User Enters Invalid Data To Import MongoDB Database Provider Account
@@ -249,7 +249,7 @@ User Imports Valid ${databaseProvider} Provider Account
     ...    Log     Provider Account ${provaccname} Exists
 
 Import ${databaseProvider} Provider Account
-    User Filters Project redhat-dbaas-operator On Project DropDown And Navigates To Database Access Page
+    User Filters Project ${operatorNamespace} On Project DropDown And Navigates To Database Access Page
     User Navigates To Import Database Provider Account Screen From Database Access Page
     Run Keyword If    "Mongo" in """${databaseProvider}"""
     ...    User Enters Data To Import MongoDB Provider Account
@@ -294,15 +294,15 @@ Duplicate Provider Account Name Error Message Appears
 
 User Navigates To Add ${databaseProvider} Topology Screen From Developer View
     User Selects Developer View
-    User Filters redhat-dbaas-operator Namespace On Project Dropdown
+    User Filters ${operatorNamespace} Namespace On Project Dropdown
     User Navigates To Developers Catalog Add Screen
     User Clicks On Cloud Hosted Database Menu
     User Selects ${databaseProvider} Tile Under Cloud Hosted Database
     Click Element    ${btnDBProvAddTopology}
 
 User Navigates To Import Provider Account Screen From Developer View
+    Wait Until Page Contains Element    ${txtNoDBInstance}    timeout=15s
     Element Should Be Visible    ${txtNoDBInstance}     message=Imported Provider Account Available
     Element Should Be Visible    ${lnkImportProvAcc}
     Click Element    ${lnkImportProvAcc}
-    Switch Window   NEW
 

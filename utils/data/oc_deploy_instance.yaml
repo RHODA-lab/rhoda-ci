@@ -6,5 +6,5 @@ metadata:
 spec:
   inventoryRef:
     name: provider_account
-    namespace: redhat-dbaas-operator
+    namespace: operator_namespace
   instanceID: instance_id

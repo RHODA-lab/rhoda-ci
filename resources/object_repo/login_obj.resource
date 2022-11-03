@@ -19,6 +19,7 @@ ${lblPageTitle}             //span[contains(@data-test-id,"resource-title") and 
 ${elemDataServiceNav}       //li[starts-with(.,"Data Services") and contains(@class,"nav")]
 ${elemDataAccessNav}        //li[starts-with(.,"Data Services") and contains(@class,"nav")]/section//li[contains(.,"Database Access")]
 ${btnPerspective}           (//div[@id="page-sidebar"]//button)[1]
+${elemCurrPerspective}      //button[contains(@class,"dropdown")]//h2[.="<<perspective>>"]
 ${elemPerspectiveOpt}       //h2[.="<<option>>"]/parent::a
 ${elemWelcomeTile}          //b[contains(.,"Welcome to the Developer Perspective!")]
 ${btnWelcomTileClose}       //button[contains(@aria-label,"Close")]

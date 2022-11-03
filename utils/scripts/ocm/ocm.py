@@ -1,4 +1,5 @@
 import argparse
+import base64
 import glob
 import os
 import re
@@ -58,6 +59,7 @@ class OpenshiftClusterManager:
         self.crunchy_pri_key = args.get("crunchy_pri_key")
         self.crdb_api_key = args.get("crdb_api_key")
         self.configrepo_dir = args.get("configrepo_dir")
+        self.dbaas_persona = args.get("dbaas_persona")
 
         ocm_env = glob.glob(dir_path + "/../../../ocm.json.*")
         if ocm_env != []:
@@ -306,6 +308,37 @@ class OpenshiftClusterManager:
         with open(config_file, "w") as yaml_file:
             yaml_file.write(yaml.dump(data, default_flow_style=False, sort_keys=False))
         log.info("update isv information success!")
+
+    def update_dbaaspolicy_config(self):
+        """Updates DBaaSPolicy Persona and Namespace in test config file"""
+        config_file = self.configrepo_dir + "test-variables.yaml"
+        with open(config_file, "r") as file:
+            data = yaml.safe_load(file)
+        data["DBAASPOLICY"] = {}
+        data["DBAASPOLICY"]["ENABLED"] = "True"
+        data["DBAASPOLICY"]["PERSONA"] = self.dbaas_persona
+        data["DBAASPOLICY"]["NAMESPACE"] = self.dbaas_persona + "-namespace"
+
+        ldap_yaml_file = (
+            os.path.abspath(os.path.dirname(__file__))
+            + "/../../../configs/templates/ldap/ldap.yaml"
+        )
+
+        with open(ldap_yaml_file, "r") as yaml_file:
+            ldap_data = list(yaml.load_all(yaml_file, Loader=yaml.SafeLoader))
+
+        ldap_password = base64.b64decode((ldap_data[1]["data"]["passwords"])).decode('utf-8').split(",")[0]
+
+        if "project" in self.dbaas_persona:
+            data["OCP_LDAP_USER"]["USERNAME"] = "ldap_project_adm1"
+            data["OCP_LDAP_USER"]["PASSWORD"] = ldap_password
+        elif "service" in self.dbaas_persona:
+            data["OCP_LDAP_USER"]["USERNAME"] = "ldap_service_adm1"
+            data["OCP_LDAP_USER"]["PASSWORD"] = ldap_password
+
+        with open(config_file, "w") as yaml_file:
+            yaml_file.write(yaml.safe_dump(data, default_flow_style=False, default_style=False, sort_keys=False))
+        log.info("DBaaSPolicy Config updated successfully!")
 
     def wait_for_osd_cluster_to_be_ready(self, timeout=7200):
         """Waits for cluster to be in ready state"""
@@ -1336,6 +1369,34 @@ if __name__ == "__main__":
         required=True,
     )
     uninstall_rhoda_parser.set_defaults(func=ocm_obj.uninstall_rhoda_addon)
+
+    # Argument parsers for configure_dbaaspolicy
+    dbaaspolicy_parser = subparsers.add_parser(
+        "configure_dbaaspolicy",
+        help=("Updates the Congifuration for DBaaSPolicy"),
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    optional_dbaaspolicy_parser = dbaaspolicy_parser._action_groups.pop()
+    required_dbaaspolicy_parser = dbaaspolicy_parser.add_argument_group(
+        "required arguments"
+    )
+    dbaaspolicy_parser._action_groups.append(optional_dbaaspolicy_parser)
+
+    required_dbaaspolicy_parser.add_argument(
+        "--configrepo_dir",
+        help="template file to generate config",
+        action="store",
+        dest="configrepo_dir",
+        metavar="",
+    )
+    required_dbaaspolicy_parser.add_argument(
+        "--persona",
+        help="DBaaS Persona",
+        action="store",
+        dest="dbaas_persona",
+        metavar="",
+    )
+    dbaaspolicy_parser.set_defaults(func=ocm_obj.update_dbaaspolicy_config)
 
     # Argument parsers for create_idp
     create_idp_parser = subparsers.add_parser(

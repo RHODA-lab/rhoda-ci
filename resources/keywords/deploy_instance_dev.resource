@@ -64,12 +64,16 @@ User Selects ${databaseProvider} Tile Under Cloud Hosted Database
     Element Should Be Visible    ${hdrCloudHostDBScreen}
 
 User Selects Database Instance For The Provider Account
-    Wait Until Keyword Succeeds     5x     1s      Wait Until Page Contains Element    ${drpDwnDevProvAccount}
-    Select From List By Label    ${drpDwnDevProvAccount}     ${provaccname}
-    Wait Until Keyword Succeeds     3x     1s      Wait Until Page Contains Element     ${tblDevDBInstance}
+    Wait Until Keyword Succeeds     2x      1s      Select Given Provider Account On Add Topology Screen
     ${instanceName}=    Select Database Instance    ${tblDevDBInstance}    ${btnDevDBInstanceConnect}    ${txtAlreadyExists}
     User Clicks Continue On Topoloy Binding Instructions
     Set Suite Variable    ${instanceName}
+
+Select Given Provider Account On Add Topology Screen
+    Wait Until Keyword Succeeds     5x     1s      Wait Until Page Contains Element    ${drpDwnDevProvAccount}
+    Select From List By Label    ${drpDwnDevProvAccount}     ${provaccname}
+    ${selected}=   Get Value    ${drpDwnDevProvAccount}
+    Should Be Equal    ${selected}    ${provaccname}
 
 User Filters And Selects The Created Database Instance
     Wait Until Keyword Succeeds    5x    2s    Instance Is Available In Selection Table
@@ -84,8 +88,7 @@ Instance Is Available In Selection Table
     ...    Reload Page    AND    Fail
 
 Instance Can Be Selected
-    Wait Until Keyword Succeeds    4x    1s    Element Should Be Visible    ${drpDwnDevProvAccount}
-    Select From List By Label    ${drpDwnDevProvAccount}     ${provaccname}
+    Wait Until Keyword Succeeds     3x  1s   Select Given Provider Account On Add Topology Screen
     Element Should Be Visible    ${txtBxSearchByName}
     Input Text    ${txtBxSearchByName}    ${instanceName}
     ${elemInstanceRadioUpd}=    Replace String    ${elemInstanceRadio}    <<inst-name>>    ${instanceName}
