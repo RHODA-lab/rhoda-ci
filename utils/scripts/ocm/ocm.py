@@ -302,6 +302,9 @@ class OpenshiftClusterManager:
         data["CRUNCHY"]["publicApiKey"] = self.crunchy_pub_key
         data["CRUNCHY"]["privateApiSecret"] = self.crunchy_pri_key
         data["COCKROACH"]["apiSecretKey"] = self.crdb_api_key
+        data["RDS"]["AWS_ACCESS_KEY_ID"] = self.aws_access_key_id
+        data["RDS"]["AWS_SECRET_ACCESS_KEY"] = self.aws_secret_access_key
+        data["RDS"]["AWS_REGION"] = self.aws_region
         with open(config_file, "w") as yaml_file:
             yaml_file.write(yaml.dump(data, default_flow_style=False, sort_keys=False))
         log.info("update isv information success!")
@@ -1155,6 +1158,30 @@ if __name__ == "__main__":
         dest="crdb_api_key",
         metavar="",
         default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--aws_access_key_id",
+        help="aws access key id",
+        action="store",
+        dest="aws_access_key_id",
+        metavar="",
+        default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--aws_secret_access_key",
+        help="aws secret access key",
+        action="store",
+        dest="aws_secret_access_key",
+        metavar="",
+        default="",
+    )
+    optional_update_info_parser.add_argument(
+        "--aws_region",
+        help="aws region",
+        action="store",
+        dest="aws_region",
+        metavar="",
+        default="us-east-1",
     )
     isv_info_parser.set_defaults(func=ocm_obj.update_isv_cluster_info)
 
