@@ -1,15 +1,15 @@
 *** Settings ***
-Documentation       Provision and Deploy Crunchy Bridge Database Instance from Developer View
+Documentation       Provision and Deploy CockroachDB Instance from Developer View
 Metadata            Version    0.0.1
 
 Library             SeleniumLibrary
 Resource            ../resources/keywords/provision_dbinstance.resource
-Resource            ../resources/keywords/suite_and_test_teardown.resource
 
 Suite Setup         Set Library Search Order    SeleniumLibrary
-Test Setup          Given The Browser Is On Openshift Home Screen
+Test Setup          Given Setup The Test Case
 Test Teardown       Tear Down The Test Case
 Suite Teardown      Tear Down The Test Suite
+Force Tags          UI  cockroach
 
 
 *** Test Cases ***

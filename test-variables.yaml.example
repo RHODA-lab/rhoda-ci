@@ -9,6 +9,10 @@ OCP_ADMIN_USER:
   AUTH_TYPE: "kube:admin"
   USERNAME: kubeadmin
   PASSWORD: abc123XYZ!
+OCP_LDAP_USER:
+  AUTH_TYPE: "ldap-provider-qe"
+  USERNAME: ldap_user
+  PASSWORD: abc123XYZ!
 MONGO:
   orgId: xxxx
   publicApiKey: xxxx
@@ -22,4 +26,7 @@ RDS:
   AWS_ACCESS_KEY_ID: xxxx
   AWS_SECRET_ACCESS_KEY: xxxx
   AWS_REGION: xxxx
-
+DBAASPOLICY:
+  ENABLED: FALSE
+  PERSONA: cluster-adm
+  NAMESPACE: redhat-dbaas-operator

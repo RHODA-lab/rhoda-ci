@@ -5,11 +5,12 @@ Metadata            Version    0.0.1
 Library             SeleniumLibrary
 Resource            ../resources/keywords/deploy_instance_dev.resource
 Resource            ../resources/keywords/import_provider_account.resource
-Resource            ../resources/keywords/suite_and_test_teardown.resource
+
 Suite Setup         Set Library Search Order    SeleniumLibrary
 Suite Teardown      Tear Down The Test Suite
-Test Setup          Given The Browser Is On Openshift Home Screen
+Test Setup          Given Setup The Test Case
 Test Teardown       Tear Down The Test Case
+Force Tags          UI
 
 
 *** Test Cases ***

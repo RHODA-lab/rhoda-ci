@@ -1,5 +1,6 @@
 *** Settings ***
 Resource    ../keywords/login.resource
+Resource    ../keywords/dbaas_policy.resource
 
 
 *** Keywords ***
@@ -32,7 +33,7 @@ Remove Created Namespaces
 
 Remove Imported Provider Accounts
     IF    "${provaccname}" != "${EMPTY}"
-        ${cmd_provider_account} =   Set Variable    oc delete DBaaSInventory/${provaccname} -n redhat-dbaas-operator --wait=true
+        ${cmd_provider_account} =   Set Variable    oc delete DBaaSInventory/${provaccname} -n ${operatorNamespace} --wait=true
         ${stdout} =    Execute Command    ${cmd_provider_account}    True
         Set Suite Variable      ${provaccname}    ${EMPTY}
     END
@@ -51,6 +52,8 @@ Tear Down The Test Case
     Close Browser
     Run Keyword If    "${instanceName}" == "${EMPTY}"
     ...    Remove Created Namespaces
+    Run Keyword If    """inv""" in """${provaccname}"""
+    ...    Remove Imported Provider Accounts
 
 Tear Down The Test Suite
     Log    Test Suite Tear Down
@@ -58,4 +61,12 @@ Tear Down The Test Suite
     Remove Imported Provider Accounts
     Remove Created Namespaces
     Force Delete Terminating Namespaces
-    Logout Of OpenShift CLI
+
+ Setup The Test Case
+    The Browser Is On Openshift Home Screen
+    Run Keyword If    not ${DBaaSPolicyConfigured} and ${DBaaSPolicyEnabled}    Run Keywords
+    ...    Setup RHODA Persona Namespace
+    ...    AND    Align RBAC For ${OCP_LDAP_USER.USERNAME}
+    ...    AND    Setup DBaaSPolicy For ${operatorNamespace}
+    ...    AND    Set Global Variable    ${DBaaSPolicyConfigured}    ${True}
+

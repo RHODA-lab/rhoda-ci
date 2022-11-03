@@ -13,7 +13,7 @@ User Navigates To Create Database Instance Screen From Database Access Page
 
 User Navigates To Create Database Instance Screen On Developer View
     User Navigates To Add ${DBProvider} To Topology Screen
-    User Selects Database Provider Account
+    Wait Until Keyword Succeeds     2x      1s      Select Given Provider Account On Add Topology Screen
     Run Keyword If    not ${invalid}    Run Keywords
     ...    Element Should Be Visible    ${lnkCreateDBInst}
     ...    AND    Click Element    ${lnkCreateDBInst}
@@ -22,11 +22,7 @@ User Selects DBProvider And Provider Account
     [Arguments]    ${isv_name}=${isv}
     Wait Until Keyword Succeeds    5x    2s    Wait Until Element Is Visible    ${drpDwnDBProvider}
     Wait Until Keyword Succeeds    10s    1s    Toggle Database Provider Drop Down ${isv_name}
-    User Selects Database Provider Account
-
-User Selects Database Provider Account
-    Wait Until Page Contains Element    ${drpDwnDevProvAccount}     timeout=10s
-    Select From List By Label    ${drpDwnDevProvAccount}     ${provaccname}
+    Wait Until Keyword Succeeds     2x      1s      Select Given Provider Account On Add Topology Screen
 
 Toggle Database Provider Drop Down ${isv_name}
     Select From List By Label    ${drpDwnDBProvider}    Select database provider
@@ -115,7 +111,7 @@ User Provisions New ${databaseProvider} Instance On ${ns_type} Namespace Using O
 DB Instance Provisioned Successfully On ${ns_type} Namespace Using OC CLI
     ${targetNS}     Set Variable    ${newProject}
     IF  '${ns_type}' == 'Default'
-         ${targetNS}     Set Variable    redhat-dbaas-operator
+         ${targetNS}     Set Variable    ${operatorNamespace}
     END
     ${cmd}  Set Variable    oc get DBaaSInstance/${instanceName} -n ${targetNS} -o custom-columns=:.status
     Wait Until Keyword Succeeds    10x    2s    Instance Available Without Error ${cmd}

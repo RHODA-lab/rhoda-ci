@@ -34,6 +34,11 @@ Openshift Database Access Operator Filtered With Succeeded Status
     Wait Until Page Contains Element    ${elemDbaasStatus}    timeout=15s
 
 Filter ${provaccname} On DBaaS Inventory
+    Run Keyword If    """.11""" in """${CLUSTER_VERSION}"""
+    ...    Click Element    ${lblOperand}
+    Comment    The above step Click Element ${lblOperand} should be enabled
+    ...        only for Openshift Version >= 4.11
+    ...        IF statement can be removed once support for 4.10 is dropped
     Wait Until Page Contains Element    ${btnInventoryFilterType}   timeout=10s
     Wait Until Page Contains Element    ${txtBxSearchByName}   timeout=10s
     Input Text    ${txtBxSearchByName}    ${provaccname}

@@ -4,12 +4,14 @@ Metadata            Version    0.0.1
 
 Library             SeleniumLibrary
 Resource            ../resources/keywords/import_provider_account.resource
-Resource            ../resources/keywords/suite_and_test_teardown.resource
 
-Suite Setup         Set Library Search Order    SeleniumLibrary
+Suite Setup         Run Keywords
+...                 Set Library Search Order    SeleniumLibrary
+...                 AND    Skip If    ${DBaaSPolicyEnabled}
 Suite Teardown      Tear Down The Test Suite
 Test Setup          Given The Browser Is On Openshift Home Screen
 Test Teardown       Tear Down The Test Case
+Force Tags          UI
 
 
 *** Test Cases ***

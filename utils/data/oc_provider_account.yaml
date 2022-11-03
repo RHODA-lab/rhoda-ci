@@ -2,7 +2,7 @@ apiVersion: dbaas.redhat.com/v1alpha1
 kind: DBaaSInventory
 metadata:
   name: pa_name_xxxxx
-  namespace: redhat-dbaas-operator
+  namespace: operator_namespace
   labels:
     related-to: dbaas-operator
     type: dbaas-vendor-service

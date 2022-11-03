@@ -1,14 +1,16 @@
 *** Settings ***
-Documentation       Provision and Deploy MongoDB Database Instance from Developer View
+Documentation       To Verify MongoDB Provider Account Import and Instance Deployment Using CLI
 Metadata            Version    0.0.1
 
 Resource            ../resources/keywords/provision_dbinstance.resource
-Resource            ../resources/keywords/suite_and_test_teardown.resource
 
-Suite Setup         Set Library Search Order    SeleniumLibrary
+Suite Setup         Run Keywords
+...                 Set Library Search Order    OpenShiftLibrary
+...                 AND    Skip If    ${DBaaSPolicyEnabled}
 Suite Teardown      Tear Down The Test Suite
 Test Setup          Given Login To OpenShift CLI
 Test Teardown       Tear Down The Test Case
+Force Tags          CLI      mongo
 
 
 *** Test Cases ***
