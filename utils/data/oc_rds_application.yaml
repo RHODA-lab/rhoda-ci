@@ -1,0 +1,5 @@
+{kind: Deployment,apiVersion: apps/v1,metadata:{name: rds-app},spec:{replicas: 1,selector:{matchLabels:{name: rds-app}},template:{metadata:{labels:{name: rds-app}},spec:{containers:[{name: rds-app,image: quay.io/ecosystem-appeng/postgresql-orm-quarkus:v0.2,imagePullPolicy: Always,ports:[{containerPort: 8080,protocol: TCP}]}]}}}}
+---
+{kind: Service,apiVersion: v1,metadata:{name: rds-app,labels:{name: rds-app}},spec:{ports:[{port: 8080,protocol: TCP,targetPort: 8080}],selector:{name: rds-app}}}
+---
+{kind: Route,apiVersion: route.openshift.io/v1,metadata:{name: rds-app,labels:{name: rds-app}},spec:{ports:{targetPort: 8080},to:{kind: Service,name: rds-app}}}

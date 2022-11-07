@@ -5,6 +5,10 @@ Resource    ../object_repo/database_access_obj.resource
 Library     ../../utils/scripts/util.py
 
 
+*** Variables ***
+${engine}     ${EMPTY}
+${invalid}      False
+
 *** Keywords ***
 User Navigates To Create Database Instance Screen From Database Access Page
     User Navigates To Database Access Under Data Services
@@ -25,9 +29,20 @@ User Selects DBProvider And Provider Account
     Wait Until Keyword Succeeds     2x      1s      Select Given Provider Account On Add Topology Screen
 
 Toggle Database Provider Drop Down ${isv_name}
-    Select From List By Label    ${drpDwnDBProvider}    Select database provider
+    Wait Until Keyword Succeeds    15s    2s    Select From List By Label    ${drpDwnDBProvider}    Select database provider
     Select From List By Label    ${drpDwnDBProvider}    ${isv_name}
     Element Should Be Visible    ${drpDwnProvAccOptn}
+    Run keyword If    "Amazon" in """${isv_name}""" and "inv" not in """${provaccname}"""
+    ...    Toggle RDS Database ${engine} Drop Down
+
+Toggle RDS Database ${engine} Drop Down
+    Select From List By Label    ${engineTypeDrpDwn}    Select one
+    Select From List By Label    ${engineTypeDrpDwn}    ${engine}
+    Element Should Be Visible    ${engineTypeDrpDwnOptn}
+
+User Enters Data To Create Database Instance For RDS DB ${engine} Engine On Admin View
+    Set Test Variable    ${engine}
+    User Enters Data To Create Database Instance On Admin View
 
 User Enters Data To Create Database Instance On Admin View
     User Selects DBProvider And Provider Account
@@ -42,11 +57,17 @@ User Enters Data To Create Database Instance On Admin View
     Click Element    ${btnCreateEnabled}
     Element Should Be Visible    ${txtCreatingDBInst}
 
+User Enters Data To Create Database Instance For RDS DB ${engine} Engine On Developer View
+    Set Test Variable    ${engine}
+    User Enters Data To Create Instance On Dev View
+
 User Enters Data To Create Instance On Dev View
     Wait Until Keyword Succeeds    15s    2s    Element Should Be Visible    ${txtBxInstName}
     ${instanceName}=    Get Instance Name   dev
     Set Test Variable    ${instanceName}
     Input Text    ${txtBxInstName}    ${instanceName}
+    Run keyword If    "RDS" in """${DBProvider}"""    Run keywords
+    ...    Toggle RDS Database ${engine} Drop Down
     Run Keyword If    "Mongo" in """${DBProvider}"""    Run Keywords
     ...    Element Should Be Visible    ${txtBxProjName}
     ...    AND    Input Text    ${txtBxProjName}    ${newProject}
@@ -72,7 +93,7 @@ DBSC Instance Available On DataBase Access Page
     Wait Until Keyword Succeeds     5x     2s   Filter DBSC Instance Until Success
 
 Filter DBSC Instance On Database Access Inventory Table
-    Wait Until Page Contains Element    ${titleDatabaseAccess}
+    Wait Until Keyword Succeeds     7x     1s   Wait Until Page Contains Element    ${titleDatabaseAccess}
     Element Should Be Visible    ${txtBxSearchByName}
     Input Text    ${txtBxSearchByName}    ${instanceName}
     ${elemInstanceNameUpd}=    Replace String    ${elemInstanceName}    <<inst-name>>    ${instanceName}

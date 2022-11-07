@@ -55,6 +55,17 @@ Tear Down The Test Case
     Run Keyword If    """inv""" in """${provaccname}"""
     ...    Remove Imported Provider Accounts
 
+Tear Down The RDS Test Case
+    Log    RDS Test Case Tear Down
+    Close Browser
+    Run Keyword If    "${instanceName}" == "${EMPTY}"
+    ...    Remove Created Namespaces
+    Run Keyword If    """inv""" in """${provaccname}"""
+    ...    Remove Imported Provider Accounts
+    IF    "${newProject}" != "${EMPTY}"
+           Set Suite Variable    ${newProject}   ${EMPTY}
+    END
+
 Tear Down The Test Suite
     Log    Test Suite Tear Down
     Remove Provisioned DBaaSInstances

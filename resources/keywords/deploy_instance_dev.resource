@@ -52,13 +52,13 @@ User Navigates To Developers Catalog Add Screen
     Click Element    ${lnkAdd}
 
 User Clicks On Cloud Hosted Database Menu
-    Wait Until Page Contains Element    ${lnkCloudHostMenu}
+    Wait Until Keyword Succeeds     2x      5s    Wait Until Page Contains Element    ${lnkCloudHostMenu}
     Click Element    ${lnkCloudHostMenu}
-    Wait Until Page Contains Element    ${hdrCloudHostDBScreen}     timeout=10s
+    Wait Until Page Contains Element    ${hdrCloudHostDBScreen}     timeout=15s
 
 User Selects ${databaseProvider} Tile Under Cloud Hosted Database
     ${lnkDBProviderTileUpd}=    Replace String    ${lnkDBProviderTile}    <<dbprovider>>    ${databaseProvider}
-    Wait Until Page Contains Element    ${lnkDBProviderTileUpd}
+    Wait Until Page Contains Element    ${lnkDBProviderTileUpd}    timeout=15s
     Click Element    ${lnkDBProviderTileUpd}
     ${hdrDBProviderModalUpd}=   Replace String    ${hdrDBProviderModal}    <<dbprovider>>    ${databaseProvider}
     Element Should Be Visible    ${hdrCloudHostDBScreen}
@@ -147,7 +147,6 @@ User Clicks Continue On Topoloy Binding Instructions
 Update Instance Name With Unique Identifier
     ${instanceUUID}=    Get Element Attribute    ${lnkPanInstance}    innerText
     Set Suite Variable    ${instanceUUID}
-
 
 User Selects Provider Account With No Instances
     Wait Until Keyword Succeeds     5x     1s      Wait Until Page Contains Element    ${drpDwnDevProvAccount}
