@@ -56,6 +56,7 @@ def sort_webtable_column(
 
 def write_yaml_to_textbox(isv: string, target_elem: string):
     """To Import YAML into Openshift"""
+    isv = isv.lower()
     sl = BuiltIn().get_library_instance("SeleniumLibrary")
     file_path = os.getcwd() + "/utils/data/oc_" + isv + "_application.yaml"
     with open(file_path, "r") as f:

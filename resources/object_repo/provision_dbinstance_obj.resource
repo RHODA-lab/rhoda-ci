@@ -18,3 +18,5 @@ ${txtInstRtrvFail}               //div[.="Database instances could not be retrie
 ${btnTryAgain}                   //button[contains(.,"Try Again") and @aria-disabled="false"]
 ${drpDwnProvAccOptn}             //select[contains(@aria-label,"Provider Account")]/option
 ${lnkCreateDBInst}               //a[contains(.,"Create New Database Instance")]
+${engineTypeDrpDwn}              //select[@aria-label="Engine Type"]
+${engineTypeDrpDwnOptn}          //select[@aria-label="Engine Type"]/option

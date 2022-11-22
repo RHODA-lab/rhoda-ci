@@ -147,7 +147,7 @@ User Enters Invalid Data To Import CockroachDB Provider Account
 
 User Enters Data To Import RDS Provider Account
     [Arguments]    ${isv}=Amazon Relational Database Service
-    set Suite Variable    ${isv}
+    Set Suite Variable    ${isv}
     User Enters Provider Account Name And Selects Database Provider
     Wait Until Page Contains Element    ${txtBxRdsAwsAccsKeyID}    timeout=10s
     Input Text    ${txtBxRdsAwsAccsKeyID}    ${RDS.AWS_ACCESS_KEY_ID}
@@ -239,6 +239,8 @@ User Imports Invalid ${databaseProvider} Provider Account
     ...    User Enters Invalid Data To Import CrunchyDB Provider Account
     ...  ELSE IF    "Cockroach" in """${databaseProvider}"""
     ...    User Enters Invalid Data To Import CockroachDB Provider Account
+    ...  ELSE IF    "RDS" in """${databaseProvider}"""
+    ...    User Enters Invalid Data To Import RDS Provider Account
     Provider Account Import Failure
 
 User Imports Valid ${databaseProvider} Provider Account
