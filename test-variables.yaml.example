@@ -13,6 +13,18 @@ OCP_LDAP_USER:
   AUTH_TYPE: "ldap-provider-qe"
   USERNAME: ldap_user
   PASSWORD: abc123XYZ!
+OCP_LDAP_PROJECT_ADM:
+  AUTH_TYPE: "ldap-provider-qe"
+  USERNAME: ldap_user
+  PASSWORD: abc123XYZ!
+OCP_LDAP_SERVICE_ADM:
+  AUTH_TYPE: "ldap-provider-qe"
+  USERNAME: ldap_user
+  PASSWORD: abc123XYZ!
+OCP_LDAP_DEV:
+  AUTH_TYPE: "ldap-provider-qe"
+  USERNAME: ldap_user
+  PASSWORD: abc123XYZ!
 MONGO:
   orgId: xxxx
   publicApiKey: xxxx

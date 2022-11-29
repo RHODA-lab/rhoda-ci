@@ -68,12 +68,13 @@ Tear Down The RDS Test Case
 
 Tear Down The Test Suite
     Log    Test Suite Tear Down
+    Login To OpenShift CLI As Cluster Admin
     Remove Provisioned DBaaSInstances
     Remove Imported Provider Accounts
     Remove Created Namespaces
     Force Delete Terminating Namespaces
 
- Setup The Test Case
+Setup The Test Case
     The Browser Is On Openshift Home Screen
     Run Keyword If    not ${DBaaSPolicyConfigured} and ${DBaaSPolicyEnabled}    Run Keywords
     ...    Setup RHODA Persona Namespace
@@ -81,3 +82,33 @@ Tear Down The Test Suite
     ...    AND    Setup DBaaSPolicy For ${operatorNamespace}
     ...    AND    Set Global Variable    ${DBaaSPolicyConfigured}    ${True}
 
+Configure DBaaS Policy Namespaces
+    Login To OpenShift CLI As Cluster Admin
+    Check LDAP Configuration For The Cluster
+    Add DBaaS Namespace
+    Add RBAC Policies For The Namespace ${DBaaSTestNS}
+
+Add DBaaS Namespace
+    ${cmd} =    Set Variable    oc new-project ${DBaaSTestNS}
+    Execute ${cmd} And Raise Exception For Error
+    Set Suite Variable    ${newProject}     ${DBaaSTestNS}
+    ${cmd} =    Set Variable    oc get project ${DBaaSTestNS}
+    Execute ${cmd} And Raise Exception For Error
+
+Add RBAC Policies For The Namespace ${ns}
+    ${cmd} =    Set Variable    oc adm policy add-role-to-user admin ${OCP_LDAP_PROJECT_ADM.USERNAME} -n ${ns}
+    Execute ${cmd} And Raise Exception For Error
+    ${cmd} =    Set Variable    oc adm policy add-role-to-user edit ${OCP_LDAP_SERVICE_ADM.USERNAME} -n ${ns}
+    Execute ${cmd} And Raise Exception For Error
+    ${cmd} =    Set Variable    oc adm policy add-role-to-user view ${OCP_LDAP_DEV.USERNAME} -n ${ns}
+    Execute ${cmd} And Raise Exception For Error
+
+Check LDAP Configuration For The Cluster
+    ${cmd} =    Set Variable    oc get ns/openldap
+    Execute ${cmd} And Raise Exception For Error
+
+Execute ${cmd} And Raise Exception For Error
+    ${stdout} =    Execute Command    ${cmd}    True
+    ${stdout_str} =    Convert To String    ${stdout}
+    ${stdout_str} =    Convert To Lower Case    ${stdout_str}
+    Should Not Contain    ${stdout_str}     error    msg=Command Executed With Error ${stdout_str}

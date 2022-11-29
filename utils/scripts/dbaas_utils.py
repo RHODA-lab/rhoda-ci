@@ -26,9 +26,9 @@ def select_database_instance(
         log.error("No Database Instances Available for Selected Account")
     for elem_iter in range(1, len(count) + 1):
         target = "(" + instance_elem + "/td[1]//input)[" + str(elem_iter) + "]"
-        instance_name = "(" + instance_elem + "/td[2])[" + str(elem_iter) + "]"
+        inst_name = "(" + instance_elem + "/td[2])[" + str(elem_iter) + "]"
         sl.find_element(target).click()
-        element_attribute = sl.find_element(instance_name).get_attribute("innerHTML")
+        element_attribute = sl.find_element(inst_name).get_attribute("innerHTML")
         sl.scroll_element_into_view(click_elem)
         sl.click_element(click_elem)
         try:
@@ -74,7 +74,7 @@ def get_import_application_name(isv: string):
             for data in yaml.load_all(f, Loader=yaml.FullLoader):
                 return data["metadata"]["name"]
     except yaml.YAMLError as e:
-        log.error("Error while parsing data file: " + str(e.context))
+        log.error("Error while parsing data file: " + str(e))
 
 
 def update_service_binding(project_name, pa_name, app_name):
@@ -148,8 +148,10 @@ def create_secret_yaml(isv_lower, valid, namespace):
     return yaml.dump(data, sort_keys=False)
 
 
-def create_secret_cli(isv, valid, namespace=BuiltIn().get_variable_value(r"\${operatorNamespace}")):
+def create_secret_cli(isv, valid, namespace=""):
     """To create the Secret Credentials Resource using the secrets yaml"""
+    if namespace == "":
+        namespace = BuiltIn().get_variable_value(r"\${operatorNamespace}")
     oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
     kind = "Secret"
     src = create_secret_yaml(isv.lower(), valid, namespace)
@@ -181,9 +183,11 @@ def create_provider_account_yaml(isv_lower, namespace):
     return yaml.dump(data, sort_keys=False)
 
 
-def import_provider_account_cli(isv, namespace=BuiltIn().get_variable_value(r"\${operatorNamespace}")):
+def import_provider_account_cli(isv, namespace=""):
     """To import a Provider Account using the configured
     Provider Account yaml"""
+    if namespace == "":
+        namespace = BuiltIn().get_variable_value(r"\${operatorNamespace}")
     oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
     kind = "DBaaSInventory"
     src = create_provider_account_yaml(isv.lower(), namespace)
@@ -193,9 +197,11 @@ def import_provider_account_cli(isv, namespace=BuiltIn().get_variable_value(r"\$
     BuiltIn().set_suite_variable("\${provaccname}", prov_acc_name)
 
 
-def deploy_db_instance_cli(isv, project, namespace=BuiltIn().get_variable_value(r"\${operatorNamespace}")):
+def deploy_db_instance_cli(isv, project, namespace=""):
     """To deploy a DB instance on given namespace for the
     imported provider account"""
+    if namespace == "":
+        namespace = BuiltIn().get_variable_value(r"\${operatorNamespace}")
     instance_list = retrieve_instances(isv, namespace)
     create_new_project(project)
     project_name = BuiltIn().get_variable_value(r"\${newProject}")
@@ -360,4 +366,3 @@ def create_provision_instance_yaml(isv, prov_acc_ns, deploy_instance_ns):
         data["spec"]["otherInstanceParams"]["projectName"] = instance
     print(data)
     return yaml.dump(data, sort_keys=False)
-

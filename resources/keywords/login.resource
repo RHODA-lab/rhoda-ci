@@ -6,7 +6,8 @@ Library     OpenShiftLibrary
 Library     ../../utils/scripts/dbaas_utils.py
 Library     ../../utils/scripts/util.py
 Resource    ../object_repo/login_obj.resource
-Resource    ../keywords/suite_and_test_teardown.resource
+Resource    ../keywords/suite_and_test_setup_teardown.resource
+Variables   ../../test-variables.yaml
 
 
 *** Variables ***
@@ -14,7 +15,7 @@ ${operatorNamespace}        ${DBAASPOLICY.NAMESPACE}
 ${DBaaSPolicyEnabled}       ${DBAASPOLICY.ENABLED}
 ${DBaaSPolicyConfigured}    ${False}
 ${rbacAligned}              ${False}
-
+${DBaaSTestNS}              dbaas-test-ns
 
 *** Keywords ***
 The Browser Is On Openshift Home Screen
@@ -41,10 +42,11 @@ Login To OpenShift CLI As Cluster Admin
     ${stdout} =    Execute Command    ${cmd}    True
 
 Login To OpenShift CLI As LDAP User
-    Oc Login    ${OCP_API_URL}    ${OCP_LDAP_USER.USERNAME}     ${OCP_LDAP_USER.PASSWORD}
-    ${cmd_login}    Set Variable    oc login ${OCP_API_URL} -u ${OCP_LDAP_USER.USERNAME} -p ${OCP_LDAP_USER.PASSWORD}
+    [Arguments]     ${username}=${OCP_LDAP_USER.USERNAME}     ${password}=${OCP_LDAP_USER.PASSWORD}     ${ns}=${operatorNamespace}
+    Oc Login    ${OCP_API_URL}    ${username}     ${password}
+    ${cmd_login}    Set Variable    oc login ${OCP_API_URL} -u ${username} -p ${password}
     ${stdout} =    Execute Command    ${cmd_login}    True
-    ${cmd}    Set Variable    oc project ${operatorNamespace}
+    ${cmd}    Set Variable    oc project ${ns}
     ${stdout} =    Execute Command    ${cmd}    True
 
 Select Login Authentication Type
@@ -88,3 +90,23 @@ User Closes Welcome Message
     Run Keyword If    ${welcomeTile}
     ...    Click Element    ${btnWelcomTileClose}
 
+The User Logs In To Openshift As ${user}
+    Set Selenium Implicit Wait    5s
+    Open Browser    ${OCP_CONSOLE_URL}    browser=${BROWSER.NAME}    options=${BROWSER.OPTIONS}
+    Select Login Authentication Type    ${${user}.AUTH_TYPE}
+    Login To Openshift As ${user}
+    Login To OpenShift CLI As LDAP User     ${${user}.USERNAME}     ${${user}.PASSWORD}     ${DBaaSTestNS}
+
+Login To Openshift As ${user}
+    Wait Until Page Contains Element    ${titleLoginPage}    timeout=10s
+    Element Should Be Visible    ${titleLoginPage}
+    Element Should Be Visible    ${txtBxUserName}
+    Element Should Be Visible    ${txtBxPassword}
+    Element Should Be Visible    ${btnLogin}
+    Input Text    ${txtBxUserName}    ${${user}.USERNAME}
+    Input Password    ${txtBxPassword}    ${${user}.PASSWORD}
+    Click Element    ${btnLogin}
+    Page Should Not Contain Element    ${lblLoginError}    message=Login Failed
+    Wait Until Keyword Succeeds    6x    5s    Wait Until Page Contains Element    ${btnPerspective}
+    User Closes Welcome Message
+    User Selects Administrator View

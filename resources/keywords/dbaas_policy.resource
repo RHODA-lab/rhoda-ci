@@ -1,6 +1,9 @@
 *** Settings ***
-Resource    ../keywords/navigation.resource
+Resource    ../keywords/deploy_application.resource
 Resource    ../object_repo/create_dbaaspolicy_obj.resource
+Resource    ../object_repo/operatorhub_obj.resource
+Resource    ../object_repo/developer_catalog_obj.resource
+Resource    ../object_repo/import_dbaasinventory_obj.resource
 
 
 *** Keywords ***

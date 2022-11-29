@@ -37,3 +37,4 @@ ${txtProvNoDBInst}              //div[contains(.,"The Provider Account resource 
 ${txtErrNoDBInst}               //div[.="No database instance in this Provider Account"]
 ${btnClose}                     //button[contains(.,"Close") and @aria-disabled="false"]
 ${lblDuplProvAccName}           //div[@aria-label="Danger Alert"]/div[contains(.,"already exists")]
+${errCreateDBaaSPolicy}         //div[@aria-label="Warning Alert"]//a[contains(.,"create a Policy")]
