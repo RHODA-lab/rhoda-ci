@@ -25,7 +25,7 @@ OCP_LDAP_DEV:
   AUTH_TYPE: "ldap-provider-qe"
   USERNAME: ldap_user
   PASSWORD: abc123XYZ!
-OCP_DBAAS_USER::
+OCP_DBAAS_USER:
   AUTH_TYPE: "ldap-provider-qe"
   USERNAME: ldap_user
   PASSWORD: abc123XYZ!
