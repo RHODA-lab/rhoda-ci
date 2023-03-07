@@ -13,7 +13,7 @@ ${invalid}      False
 User Navigates To Create Database Instance Screen From Database Access Page
     User Navigates To Database Access Under Data Services
     Wait Until Page Contains Element    ${titleDatabaseAccess}
-    Select Create Database Instance From Configuration Button DropDown
+    Select Create Database Instance From Configure Button DropDown
 
 User Navigates To Create Database Instance Screen On Developer View
     User Navigates To Add ${DBProvider} To Topology Screen
@@ -134,10 +134,8 @@ DB Instance Provisioned Successfully On ${ns_type} Namespace Using OC CLI
     IF  '${ns_type}' == 'Default'
          ${targetNS}     Set Variable    ${operatorNamespace}
     END
-    ${cmd}  Set Variable    oc get DBaaSInstance/${instanceName} -n ${targetNS} -o custom-columns=:.status
-    Wait Until Keyword Succeeds    10x    2s    Instance Available Without Error ${cmd}
-    ${cmd_instance}  Set Variable    oc get DBaaSInstance/${instanceName} -n ${targetNS} -o custom-columns=:.status.instanceID | grep -v '^$'
-    Retrieve Instance ID ${cmd_instance}
+    ${return}=      Check Instance Provision    ${instanceName}     ${targetNS}
+    Set Suite Variable  ${instanceID}   ${return}
 
 Instance Available Without Error ${cmd}
     ${stdout} =    Execute Command    ${cmd}    True
@@ -145,9 +143,3 @@ Instance Available Without Error ${cmd}
     ${stdout_str} =    Convert To Lower Case    ${stdout_str}
     Should Contain    ${stdout_str}    type:provisionready
     Should Not Contain Any    ${stdout_str}     error   notfound
-
-Retrieve Instance ID ${cmd_instance}
-    ${stdout} =    Execute Command    ${cmd_instance}    True
-    ${stdout_str} =    Convert To String    ${stdout}[0]
-    Should Not Contain Any    ${stdout_str}    None
-    Set Suite Variable  ${instanceID}   ${stdout_str}

@@ -3,8 +3,8 @@ Object Repository for Create Database Instance Screen
 
 
 *** Variables ***
-${txtBxInstName}                 //input[@id="instance-name"]
-${txtBxProjName}                 //input[@id="project-name"]
+${txtBxInstName}                 //input[@id="name"]
+${txtBxProjName}                 //input[@id="teamProject"]
 ${elemInstanceRadio}             (//td[contains(.,"<<inst-name>>")]/parent::tr//input)[1]
 ${btnAddToTplgy}                 //button[@id='instance-select-button']
 ${txtCreatingDBInst}             //h3[contains(.,"Creating Database Instance...")]

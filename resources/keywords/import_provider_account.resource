@@ -32,7 +32,7 @@ User Navigates To Import Database Provider Account Screen From Database Access P
     ${status}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${tblDBProviderAcc}    timeout=10s
     Run Keyword If    not ${status}
     ...    Log    No Database Provider Account Imported on this Cluster
-    Select Import Database Provider Account From Configuration Button DropDown
+    Select Import Database Provider Account From Configure Button DropDown
     Sleep    8s
     Comment    [known issue] Auto Page Refresh - Blind Sleep provided for mitigation
     ...        Will be replaced with intelligent wait if issue persists in near future

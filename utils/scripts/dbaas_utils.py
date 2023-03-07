@@ -197,7 +197,7 @@ def import_provider_account_cli(isv, namespace=None):
     oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
     kind = "DBaaSInventory"
     src = create_provider_account_yaml(isv.lower(), namespace)
-    api_version = "dbaas.redhat.com/v1alpha1"
+    api_version = "dbaas.redhat.com/v1beta1"
     oc_cli.oc_apply(kind, src, api_version)
     log.info("Provider Account Imported!")
     BuiltIn().set_suite_variable("\${provaccname}", prov_acc_name)
@@ -224,25 +224,28 @@ def retrieve_instances(isv, namespace):
         create_secret_cli(isv, "true")
         import_provider_account_cli(isv, namespace)
         provider_account = BuiltIn().get_variable_value(r"\${provaccname}")
-    while counter < 5:
+    while counter < 3:
         try:
             counter += 1
             oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
-            res = oc_cli.oc_watch("DBaaSInventory", name=provider_account, namespace=namespace)
+            res = oc_cli.oc_watch("DBaaSInventory", name=provider_account, namespace=namespace, timeout=30)
             pa_status = res[0]['object']['status']['conditions']
             for state in pa_status:
                 if state['status'] != "True":
                     pa_reconcile = "False"
             if pa_reconcile == "True":
                 log.info("Provider Reconcillation completed successfully")
-                instances = res[0]['object']['status']['instances']
+                instances = res[0]['object']['status']['databaseServices']
                 for instance in instances:
-                    inst_list.append(instance['instanceID'])
+                    inst_list.append(instance['serviceID'])
                 log.info("Provider account Instances retrieved successfully!")
                 return inst_list
             else:
                 counter += 1
                 continue
+        except KeyError as e:
+            BuiltIn().fail("Payload loaded without specified key: " + str(e))
+            break
         except Exception as e:
             log.error("Exception occured: " + str(e))
     else:
@@ -262,12 +265,12 @@ def deploy_instance(project, instance_list: List[str]):
     """To deploy instance to given project"""
     oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
     kind = "DBaaSConnection"
-    api_version = "dbaas.redhat.com/v1alpha1"
+    api_version = "dbaas.redhat.com/v1beta1"
     for instance_id in instance_list:
         src = create_deploy_instance_yaml(project, instance_id)
         oc_cli.oc_apply(kind, src, api_version)
         counter = 0
-        while counter < 5:
+        while counter < 3:
             try:
                 counter += 1
                 instance = BuiltIn().get_variable_value(r"\${instanceName}")
@@ -303,7 +306,7 @@ def create_deploy_instance_yaml(project, instance_id):
     data["spec"]["inventoryRef"]["namespace"] = BuiltIn().get_variable_value(
         r"\${operatorNamespace}"
     )
-    data["spec"]["instanceID"] = instance_id
+    data["spec"]["databaseServiceID"] = instance_id
     BuiltIn().set_suite_variable(r"\${instanceID}", instance_id)
     BuiltIn().set_suite_variable(r"\${instanceName}", instance_name)
     return yaml.dump(data, sort_keys=False)
@@ -324,7 +327,7 @@ def check_dbsc_connection(project, instance_id):
             cmd = "oc describe DBaaSConnections/{} -n {}".format(dbsc_inst, project)
             result = util.execute_command(cmd)
             response = yaml.safe_load(result)
-            if response["Spec"]["Instance ID"] == instance_id:
+            if response["Spec"]["Database Service ID"] == instance_id:
                 log.info("Given Instance Available on Project Namespace")
                 break
         else:
@@ -350,7 +353,7 @@ def provision_db_instance(isv, deploy_view, default_pa_ns="Yes"):
     src = create_provision_instance_yaml(isv, prov_acc_ns, deploy_instance_ns)
     oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
     kind = "DBaaSInstance"
-    api_version = "dbaas.redhat.com/v1alpha1"
+    api_version = "dbaas.redhat.com/v1beta1"
     oc_cli.oc_apply(kind, src, api_version)
     log.info("DB Instance " + BuiltIn().get_variable_value(r"\${instanceName}")
              + "provisioned successfully!")
@@ -368,9 +371,11 @@ def create_provision_instance_yaml(isv, prov_acc_ns, deploy_instance_ns):
     data["spec"]["name"] = instance
     data["spec"]["inventoryRef"]["name"] = BuiltIn().get_variable_value(r"\${provaccname}")
     data["spec"]["inventoryRef"]["namespace"] = prov_acc_ns
+    data["spec"]["provisioningParameters"]["name"] = instance
     if "mongo" in isv.lower():
-        data["spec"]["otherInstanceParams"]["projectName"] = instance
-    print(data)
+        data["spec"]["provisioningParameters"]["teamProject"] = instance + "-pro"
+    if "crunchy" in isv.lower():
+        data["spec"]["provisioningParameters"]["cloudProvider"] = "aws"
     return yaml.dump(data, sort_keys=False)
 
 
@@ -410,3 +415,20 @@ def add_policy_connection_nsselector(labelandconds: list):
                 txtbx_value_xpath = txtbx_value_xpath.replace("<<index>>", str(i)).replace("<<index2>>", str(j))
                 sl.click_element(btn_add_value)
                 sl.input_text(txtbx_value_xpath)
+
+
+def check_instance_provision(instance, namespace):
+    """To check the provisioned instance status"""
+    oc_cli = BuiltIn().get_library_instance("OpenshiftLibrary")
+    counter = 0
+    error = None
+    while counter < 3:
+        try:
+            counter += 1
+            res = oc_cli.oc_watch("DBaaSInstance", name=instance, namespace=namespace, timeout=30)
+            if res[0]['object']['status']['phase'].lower() in ("ready", "creating"):
+                return res[0]['object']['status']["instanceID"]
+        except Exception as error:
+            log.info("Provisioned instance not available with Creating or Ready status")
+    else:
+        BuiltIn().fail("Instance Provisioning failed with error " + str(error))

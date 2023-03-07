@@ -9,6 +9,7 @@ Suite Setup         Run Keywords
 ...                     AND    Skip If    ${DBaaSPolicyEnabled}
 Suite Teardown      Tear Down The Test Suite
 Test Setup          Given Login To OpenShift CLI
+Test Teardown       Tear Down The Test Case
 
 Force Tags          CLI    crunchy
 
