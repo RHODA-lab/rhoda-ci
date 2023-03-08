@@ -3,7 +3,7 @@ Object Repository for Create Database Instance Screen
 
 
 *** Variables ***
-${txtBxInstName}                 //input[@id="instance-name"]
+${txtBxInstName}                 //input[@id="name"]
 ${txtBxProjName}                 //input[@id="project-name"]
 ${elemInstanceRadio}             (//td[contains(.,"<<inst-name>>")]/parent::tr//input)[1]
 ${btnAddToTplgy}                 //button[@id='instance-select-button']
@@ -16,7 +16,11 @@ ${txtProvFailMsg}                //div[.="Provider account information could not
 ${txtInstFailHead}               //h2[.="Database instances retrieval failed"]
 ${txtInstRtrvFail}               //div[.="Database instances could not be retrieved. Please try again."]
 ${btnTryAgain}                   //button[contains(.,"Try Again") and @aria-disabled="false"]
-${drpDwnProvAccOptn}             //select[contains(@aria-label,"Provider Account")]/option
+${drpDwnProvAccOptn}             //select[contains(@aria-label,"Database Provider")]/option
 ${lnkCreateDBInst}               //a[contains(.,"Create New Database Instance")]
-${engineTypeDrpDwn}              //select[@aria-label="Engine Type"]
-${engineTypeDrpDwnOptn}          //select[@aria-label="Engine Type"]/option
+${engineTypeDrpDwn}              //select[@aria-label="databaseType"]
+${engineTypeDrpDwnOptn}          //select[@aria-label="databaseType"]/option
+${instClassDrpDwn}               //select[@aria-label="machineType"]
+${instClassDrpDwnOptn}           //select[@aria-label="machineType"]/option
+${txtBxAllocStorage}             //input[@id="storageGib"]
+

@@ -32,19 +32,17 @@ User Navigates To Import Database Provider Account Screen From Database Access P
     ${status}=    Run Keyword And Return Status    Wait Until Page Contains Element    ${tblDBProviderAcc}    timeout=10s
     Run Keyword If    not ${status}
     ...    Log    No Database Provider Account Imported on this Cluster
-    Select Import Database Provider Account From Configuration Button DropDown
+    Select Import Database Provider Account From Configure Button DropDown
     Sleep    8s
     Comment    [known issue] Auto Page Refresh - Blind Sleep provided for mitigation
     ...        Will be replaced with intelligent wait if issue persists in near future
     ...        Will be removed once issue is fixed
 
 Select ${option} From ${menu} Button DropDown
-    ${btnMenuDropDownUpd}=    Replace String    ${btnMenuDropDown}    <<menu>>    ${menu}
-    Wait Until Keyword Succeeds    10s    1s    Wait Until Element Is Visible    ${btnMenuDropDownUpd}
-    Click Element    ${btnMenuDropDownUpd}
-    ${btnMenuOptDropDownUpd}=    Replace String    ${btnMenuOptDropDown}    <<menuopt>>    ${option}
-    Element Should Be Visible    ${btnMenuOptDropDownUpd}
-    Click Element    ${btnMenuOptDropDownUpd}
+    Wait Until Keyword Succeeds    10s    1s    Wait Until Element Is Visible    ${btnMenuDropDown}
+    Click Element    ${btnMenuDropDown}
+    Element Should Be Visible    ${btnMenuOptDropDown}
+    Click Element    ${btnMenuOptDropDown}
 
 Application Navigate To Create Provider Account Page And Error Message Displayed For Invalid Namespace
     Wait Until Page Contains Element    ${titleImportProviderAcc}    timeout=15s
@@ -217,6 +215,7 @@ Provider Account Import Failure
     Provider Account Import Failure Screen
     User Navigates To DBaaS Inventories Screen
     Check Status Of Invalid Provider Account
+
 
 Provider Account Import Failure Screen
     Wait Until Keyword Succeeds    3x    1s    Element Should Be Visible    ${titleImportProviderAcc}

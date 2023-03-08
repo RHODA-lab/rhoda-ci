@@ -27,8 +27,9 @@ ${btnCreateEnabled}             //button[contains(.,"Create") and @aria-disabled
 ${lblDBInstSuccess}             //h2[contains(.,"Database instances") and contains(.,"successful")]
 ${btnViewProviderAcc}           //button[contains(.,"View Provider Accounts")]
 ${tblInstanceTable}             id:instance-table
-${btnMenuDropDown}              //button[contains(.,"<<menu>>")]
-${btnMenuOptDropDown}           //a[contains(.,"<<menuopt>>")]
+${btnMenuDropDown}              //*[@id="toggle-id-4"]
+${btnMenuOptDropDown}           //a[@class="pf-c-dropdown__menu-item"]
+${btnMenuOptDropDown2}           //a[@data-ouia-component-id="OUIA-Generated-DropdownItem-2"]
 ${tblDBProviderAcc}             id:instance-connection-status-table
 ${lblDBInstFailure}             //h2[.="Database instances retrieval failed"]
 ${txtInvCred}                   //div[contains(.,"Invalid credentials")]
