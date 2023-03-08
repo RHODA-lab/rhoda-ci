@@ -1,11 +1,11 @@
 apiVersion: binding.operators.coreos.com/v1alpha1
 kind: ServiceBinding
 metadata:
-  name: bindname
-  namespace: namespace
+  name: 9957-rds-rhod-304-smoke-ui
+  namespace: 9957-rds-rhod-304-smoke-ui
 spec:
   application:
-    name: fruit-shop
+    name: rds-app
     group: apps
     version: v1
     resource: deployments
@@ -13,5 +13,5 @@ spec:
   - group: dbaas.redhat.com
     version: v1alpha1
     kind: DBaaSConnection
-    name: namespace
+    name: dev-inst-6564-bafc30c9ca
   detectBindingResources: true
