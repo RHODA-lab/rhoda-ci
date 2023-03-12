@@ -8,12 +8,20 @@ Library     ../../utils/scripts/util.py
 *** Variables ***
 ${engine}     ${EMPTY}
 ${invalid}      False
+${pstgInstClass}    db.r5.xlarge
+${allocStorage}    20
 
 *** Keywords ***
 User Navigates To Create Database Instance Screen From Database Access Page
     User Navigates To Database Access Under Data Services
     Wait Until Page Contains Element    ${titleDatabaseAccess}
     Select Create Database Instance From Configure Button DropDown
+
+Select ${option} From ${menu} Button DropDown Provision
+    Wait Until Keyword Succeeds    10s    1s    Wait Until Element Is Visible    ${btnMenuDropDown}
+    Click Element    ${btnMenuDropDown}
+    Element Should Be Visible    ${btnMenuOptDropDown}
+    Click Element    ${btnMenuOptDropDown}
 
 User Navigates To Create Database Instance Screen On Developer View
     User Navigates To Add ${DBProvider} To Topology Screen
@@ -36,9 +44,15 @@ Toggle Database Provider Drop Down ${isv_name}
     ...    Toggle RDS Database ${engine} Drop Down
 
 Toggle RDS Database ${engine} Drop Down
-    Select From List By Label    ${engineTypeDrpDwn}    Select one
-    Select From List By Label    ${engineTypeDrpDwn}    ${engine}
+    #This is a temporary solution until bug DBAAS-1226 will be fixed. We need to click the Engine field
+    #and select a value which is not the first value 'PostgreSQL'. Otherwise, the 'Engine' value is not sent in the payload
+    Wait Until Keyword Succeeds    15s    2s    Select From List By Label    ${engineTypeDrpDwn}    MySQL
+    Wait Until Keyword Succeeds    15s    2s    Select From List By Label    ${engineTypeDrpDwn}    ${engine}
     Element Should Be Visible    ${engineTypeDrpDwnOptn}
+
+Toggle RDS Instance Class Drop Down
+    Wait Until Keyword Succeeds    15s    2s    Select From List By Label    ${instClassDrpDwn}    ${pstgInstClass}
+    Element Should Be Visible    ${instClassDrpDwnOptn}
 
 User Enters Data To Create Database Instance For RDS DB ${engine} Engine On Admin View
     Set Test Variable    ${engine}
@@ -59,6 +73,8 @@ User Enters Data To Create Database Instance On Admin View
 
 User Enters Data To Create Database Instance For RDS DB ${engine} Engine On Developer View
     Set Test Variable    ${engine}
+    Set Test Variable    ${pstgInstClass}
+    Set Test Variable    ${txtBxAllocStorage}
     User Enters Data To Create Instance On Dev View
 
 User Enters Data To Create Instance On Dev View
@@ -68,6 +84,8 @@ User Enters Data To Create Instance On Dev View
     Input Text    ${txtBxInstName}    ${instanceName}
     Run keyword If    "RDS" in """${DBProvider}"""    Run keywords
     ...    Toggle RDS Database ${engine} Drop Down
+    ...    AND    Toggle RDS Instance Class Drop Down
+    ...    AND    Input Text    ${txtBxAllocStorage}    ${AllocStorage}
     Run Keyword If    "Mongo" in """${DBProvider}"""    Run Keywords
     ...    Element Should Be Visible    ${txtBxProjName}
     ...    AND    Input Text    ${txtBxProjName}    ${newProject}
@@ -83,7 +101,7 @@ ${databaseProvider} DBSC Instance Provisioned And Deployed On Developer Topology
     DBSC Instance For ${databaseProvider} Deployed Successfully
 
 DBSC Instance Provisioned Successfully
-    Wait Until Keyword Succeeds     7x     1s      Wait Until Page Contains Element    ${txtInstCreated}
+    Wait Until Keyword Succeeds     10x     5s      Wait Until Page Contains Element    ${txtInstCreated}
     Element Should Be Visible    ${txtCreationInfo}
     Element Should Be Visible    ${btnViewDBInst}
     Click Button    ${btnViewDBInst}

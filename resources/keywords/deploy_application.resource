@@ -30,7 +30,7 @@ User Creates Service Binding Between ${databaseProvider} DBSC Instance And Impor
     ${bindName}=    Update Service Binding    ${newProject}    ${instanceUUID}    ${appname}
     Set Test Variable    ${bindName}
     Create Service Binding      ${newProject}
-    Wait Until Keyword Succeeds    3x    1s     Wait Until Page Contains Element    ${elemSrvcBindArrow}
+    Wait Until Keyword Succeeds    10x    1s     Wait Until Page Contains Element    ${elemSrvcBindArrow}
     Click Element   ${elemSrvcBindArrow}
     ${elemIconDeploymentUpd}=       Replace String    ${elemIconDeployment}    <<appname>>    ${appname}
     Instance Pan Displays   ${bindName}

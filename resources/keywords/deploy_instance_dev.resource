@@ -89,7 +89,7 @@ Instance Is Available In Selection Table
     ...    Reload Page    AND    Fail
 
 Instance Can Be Selected
-    Wait Until Keyword Succeeds     3x  1s   Select Given Provider Account On Add Topology Screen
+    Wait Until Keyword Succeeds     5x  1s   Select Given Provider Account On Add Topology Screen
     Element Should Be Visible    ${txtBxSearchByName}
     Input Text    ${txtBxSearchByName}    ${instanceName}
     ${elemInstanceRadioUpd}=    Replace String    ${elemInstanceRadio}    <<inst-name>>    ${instanceName}
