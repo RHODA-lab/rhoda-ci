@@ -10,7 +10,7 @@ Resource    ../keywords/suite_and_test_setup_teardown.resource
 
 
 *** Variables ***
-${operatorNamespace}        redhat-dbaas-operator
+${operatorNamespace}        openshift-dbaas-operator
 ${DBaaSPolicyEnabled}       ${DBAASPOLICY.ENABLED}
 ${DBaaSPolicyConfigured}    ${False}
 ${rbacAligned}              ${False}

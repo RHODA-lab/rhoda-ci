@@ -322,8 +322,10 @@ Import Provider Account Failure For DBaaS Policy
     Wait Until Page Contains Element    ${errCreateDBaaSPolicy}     timeout=20s
 
 User Navigates To Import ${databaseProvider} Provider Account On Developer View
-    User Navigates To Add Topology Screen From Developer View      ${databaseProvider}      ${DBaaSTestNS}
-    User Navigates To Import Provider Account Screen From Developer View
+    Wait Until Page Contains Element    ${txtNoDBInstance}    timeout=15s
+    Element Should Be Visible    ${txtNoDBInstance}     message=Imported Provider Account Available
+    Element Should Be Visible    ${lnkImportProvAcc}
+    Click Element    ${lnkImportProvAcc}
 
 Cloud Hosted Database Tile Not Loaded Under Add Topology Screen
     Wait Until Page Does Not Contain    ${lnkCloudHostMenu}

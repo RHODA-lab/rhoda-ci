@@ -68,6 +68,7 @@ def write_yaml_to_textbox(isv: string, target_elem: string):
 
 def get_import_application_name(isv: string):
     """To retrieve Application name from input YAML"""
+    isv = isv.lower()
     file_path = os.getcwd() + "/utils/data/oc_" + isv + "_application.yaml"
     try:
         with open(file_path, "r") as f:
@@ -77,16 +78,16 @@ def get_import_application_name(isv: string):
         log.error("Error while parsing data file: " + str(e))
 
 
-def update_service_binding(project_name, pa_name, app_name):
+def update_service_binding(project_name, instance, app_name):
     """To update the Service binding yaml file"""
     binder = os.getcwd() + "/utils/data/oc_source_binding.yaml"
     with open(binder, "r") as fh:
         data = yaml.safe_load(fh)
     data["metadata"] = {}
-    data["metadata"]["name"] = project_name + "-" + pa_name
+    data["metadata"]["name"] = project_name
     data["metadata"]["namespace"] = project_name
     data["spec"]["application"]["name"] = app_name
-    data["spec"]["services"][0]["name"] = pa_name
+    data["spec"]["services"][0]["name"] = instance
     with open(binder, "w") as yaml_file:
         yaml_file.write(yaml.dump(data, default_flow_style=False, sort_keys=False))
     log.info("Updated Service binding!")
