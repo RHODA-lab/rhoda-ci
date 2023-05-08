@@ -10,7 +10,7 @@ Resource    ../keywords/suite_and_test_setup_teardown.resource
 
 
 *** Variables ***
-${operatorNamespace}        redhat-dbaas-operator
+${operatorNamespace}        openshift-dbaas-operator
 ${DBaaSPolicyEnabled}       ${DBAASPOLICY.ENABLED}
 ${DBaaSPolicyConfigured}    ${False}
 ${rbacAligned}              ${False}
@@ -37,7 +37,7 @@ Login To OpenShift CLI As Cluster Admin
     Oc Login    ${OCP_API_URL}    ${OCP_ADMIN_USER.USERNAME}     ${OCP_ADMIN_USER.PASSWORD}
     ${cmd_login}    Set Variable    oc login ${OCP_API_URL} -u ${OCP_ADMIN_USER.USERNAME} -p ${OCP_ADMIN_USER.PASSWORD}
     ${stdout} =    Execute Command    ${cmd_login}    True
-    ${cmd}    Set Variable    oc project redhat-dbaas-operator
+    ${cmd}    Set Variable    oc project openshift-dbaas-operator
     ${stdout} =    Execute Command    ${cmd}    True
 
 Login To OpenShift CLI As LDAP User

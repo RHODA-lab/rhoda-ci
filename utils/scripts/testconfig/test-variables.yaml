@@ -44,5 +44,5 @@ RDS:
 DBAASPOLICY:
   ENABLED: FALSE
   PERSONA: cluster-adm
-  NAMESPACE: redhat-dbaas-operator
+  NAMESPACE: openshift-dbaas-operator
 

@@ -7,7 +7,7 @@ Resource    ../object_repo/installed_operators_obj.resource
 *** Keywords ***
 User Searches Openshift Database Access Operator On RHODA Installed Cluster
     The Browser Is On OperatorHub Page
-    User Filters redhat-dbaas-operator Namespace On Project Dropdown
+    User Filters openshift-dbaas-operator Namespace On Project Dropdown
     User Filters Database Access Operator On Filter TextBox
 
 User Filters ${projectName} Namespace On Project Dropdown

@@ -25,7 +25,7 @@ Scenario: Redhat Database Operator Installed On Operator Hub
 Scenario: Redhat Dbaas Operator Namespace Created For RHODA Installation
     [Tags]    RHODA-002    smoke
     When User Navigates To Installed Operators Under Operators
-    And User Filters redhat-dbaas-operator Namespace On Project Dropdown
+    And User Filters openshift-dbaas-operator Namespace On Project Dropdown
     Then Openshift Database Access Operator Filtered With Succeeded Status
 
 Scenario: Error Message To Select Valid Namespace To Import Provider Account

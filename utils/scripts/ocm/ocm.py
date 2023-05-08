@@ -714,19 +714,19 @@ class OpenshiftClusterManager:
 
         for user in ldap_usernames:
             if "operator" in user:
-                cmd = "oc adm policy add-role-to-user admin {} -n redhat-dbaas-operator".format(user)
+                cmd = "oc adm policy add-role-to-user admin {} -n openshift-dbaas-operator".format(user)
                 log.info("CMD: {}".format(cmd))
                 execute_command(cmd)
             elif "project" in user:
-                cmd = "oc adm policy add-role-to-user admin {} -n redhat-dbaas-operator".format(user)
+                cmd = "oc adm policy add-role-to-user admin {} -n openshift-dbaas-operator".format(user)
                 log.info("CMD: {}".format(cmd))
                 execute_command(cmd)
             elif "service" in user:
-                cmd = "oc adm policy add-role-to-user edit {} -n redhat-dbaas-operator".format(user)
+                cmd = "oc adm policy add-role-to-user edit {} -n openshift-dbaas-operator".format(user)
                 log.info("CMD: {}".format(cmd))
                 execute_command(cmd)
             elif "dev" in user:
-                cmd = "oc adm policy add-role-to-user view {} -n redhat-dbaas-operator".format(user)
+                cmd = "oc adm policy add-role-to-user view {} -n openshift-dbaas-operator".format(user)
                 log.info("CMD: {}".format(cmd))
                 execute_command(cmd)
 
